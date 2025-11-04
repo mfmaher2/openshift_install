@@ -20,21 +20,29 @@ Tip: To generate a bcrypt hash for dex-reset.yaml, see “Appendix: Generate a b
 Mission Control uses cert-manager CRDs (Certificate, Issuer, ClusterIssuer). Install upstream cert-manager via Helm:
 
 # Namespace
+```bash
 oc create namespace cert-manager || true
+```
 
 # Install CRDs
+```bash
 kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.14.5/cert-manager.crds.yaml
+```
 
 # Helm repo and install
+```bash
 helm repo add jetstack https://charts.jetstack.io
 helm repo update
 helm upgrade --install cert-manager jetstack/cert-manager \
   --namespace cert-manager \
   --version v1.14.5
+```
 
 # Verify CRDs and pods
+```bash
 oc get crd certificates.cert-manager.io issuers.cert-manager.io clusterissuers.cert-manager.io
 oc get pods -n cert-manager
+```
 
 ### Install Mission Control (fresh cluster)
 
