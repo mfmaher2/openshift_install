@@ -15,6 +15,8 @@ This guide walks through a clean install of Mission Control on OpenShift with fa
 Tip: To generate a bcrypt hash for dex-reset.yaml, see “Appendix: Generate a bcrypt hash”.
 
 ---
+# Select VM from Techzone
+![Mission Control UI login screen](docs/images/techzone.png "Mission Control UI")
 
 # Install Cert-Manager (required upstream Helm)
 Mission Control uses cert-manager CRDs (Certificate, Issuer, ClusterIssuer). Install upstream cert-manager via Helm:
