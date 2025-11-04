@@ -127,7 +127,8 @@ echo "${ROUTER_IP} ${HOST}" | sudo tee -a /etc/hosts
 ---
 
 ### Login to the UI
-
+# Select VM from Techzone
+![Mission Control UI login screen](docs/images/missioncontrolui.png "Mission Control UI")
 - Username: admin@example.com
 - Password: the clear-text password you hashed in dex-reset.yaml
 
