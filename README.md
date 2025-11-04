@@ -15,11 +15,11 @@ This guide walks through a clean install of Mission Control on OpenShift with fa
 Tip: To generate a bcrypt hash for dex-reset.yaml, see “Appendix: Generate a bcrypt hash”.
 
 ---
-### Select VM from Techzone
+Select VM from Techzone
 ![Mission Control UI login screen](docs/images/techzone.png "Mission Control UI")
-### Select copy command from top right corner after logging into OpenShift Cluster Console
+Select copy command from top right corner after logging into OpenShift Cluster Console
 ![Mission Control UI login screen](docs/images/logincmd.png "Mission Control UI")
-### Get Token to login into Openshift Cluster CLI
+Get Token to login into Openshift Cluster CLI
 ![Mission Control UI login screen](docs/images/logintokencmd.png "Mission Control UI")
 ### Install Cert-Manager (required upstream Helm)
 Mission Control uses cert-manager CRDs (Certificate, Issuer, ClusterIssuer). Install upstream cert-manager via Helm:
@@ -139,7 +139,7 @@ oc rollout status  deploy/mission-control-dex -n mission-control
 ---
 
 ### Create a cluster (OpenShift SCC grant)
-### Select create cluster button
+Select create cluster button
 ![Mission Control UI login screen](docs/images/createcluster.png "Mission Control UI")
 On OpenShift, Cassandra pods may be blocked by the default SCC when they request fixed UIDs/FSGroup. After creating your cluster from the UI:
 
