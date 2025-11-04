@@ -141,7 +141,7 @@ oc rollout status  deploy/mission-control-dex -n mission-control
 ---
 
 ### Create a cluster (OpenShift SCC grant)
-
+![Mission Control UI login screen](docs/images/createcluster.png "Mission Control UI")
 On OpenShift, Cassandra pods may be blocked by the default SCC when they request fixed UIDs/FSGroup. After creating your cluster from the UI:
 
 1) Identify which ServiceAccount the Cassandra StatefulSet uses (or assume mission-control if that’s your template default):
