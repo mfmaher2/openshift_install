@@ -47,7 +47,7 @@ oc get crd certificates.cert-manager.io issuers.cert-manager.io clusterissuers.c
 oc get pods -n cert-manager
 ```
 
-# Install Mission Control (fresh cluster)
+# Install Mission Control 
 
 This installs Mission Control into the mission-control namespace using your values files.
 
