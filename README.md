@@ -51,6 +51,16 @@ This installs Mission Control into the mission-control namespace using your valu
 ```bash
 # Create namespace
 oc new-project mission-control
+# Run the following commands to grant access to Mission Control service accounts:
+oc adm policy add-scc-to-user nonroot-v2 -z loki
+oc adm policy add-scc-to-user nonroot-v2 -z mission-control
+oc adm policy add-scc-to-user nonroot-v2 -z mission-control-agent
+oc adm policy add-scc-to-user nonroot-v2 -z mission-control-aggregator
+oc adm policy add-scc-to-user nonroot-v2 -z mission-control-cass-operator
+oc adm policy add-scc-to-user nonroot-v2 -z mission-control-dex
+oc adm policy add-scc-to-user nonroot-v2 -z mission-control-k8ssandra-operator
+oc adm policy add-scc-to-user nonroot-v2 -z mission-control-kube-state-metrics
+oc adm policy add-scc-to-user nonroot-v2 -z mission-control-mimir
 
 # Install Mission Control
 CHART_VERSION=1.15.0
