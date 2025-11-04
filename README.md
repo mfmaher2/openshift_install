@@ -16,7 +16,7 @@ Tip: To generate a bcrypt hash for dex-reset.yaml, see “Appendix: Generate a b
 
 ---
 
-### 4) Install Mission Control (fresh cluster)
+### Install Mission Control (fresh cluster)
 
 This installs Mission Control into the mission-control namespace using your values files.
 
@@ -45,7 +45,7 @@ Notes:
 
 ---
 
-### 5) Expose the UI (TLS passthrough via OpenShift Route)
+### Expose the UI (TLS passthrough via OpenShift Route)
 
 The Mission Control UI serves HTTPS on port 8080. Name the Service port and configure the Route to passthrough TLS to the pod.
 
@@ -83,7 +83,7 @@ echo "${ROUTER_IP} ${HOST}" | sudo tee -a /etc/hosts
 
 ---
 
-### 6) Login to the UI
+### Login to the UI
 
 - Username: admin@example.com
 - Password: the clear-text password you hashed in dex-reset.yaml
@@ -97,7 +97,7 @@ oc rollout status  deploy/mission-control-dex -n mission-control
 
 ---
 
-### 7) Create a cluster (OpenShift SCC grant)
+### Create a cluster (OpenShift SCC grant)
 
 On OpenShift, Cassandra pods may be blocked by the default SCC when they request fixed UIDs/FSGroup. After creating your cluster from the UI:
 
@@ -127,7 +127,7 @@ oc scale sts -n <cluster-ns> <rack-sts-name> --replicas=1
 
 ---
 
-### 8) (Optional) Re-enable Observability
+### (Optional) Re-enable Observability
 
 After initial success, enable Loki/Mimir/Grafana with proper object storage configuration (S3-compatible, GCS, etc.).
 
@@ -146,7 +146,7 @@ Tip: Configure storage and credentials for Loki/Mimir first to avoid CrashLoopBa
 
 ---
 
-### 9) Verify
+### Verify
 
 ```bash
 # Helm release
@@ -162,7 +162,7 @@ oc get route mission-control-ui -n mission-control \
 
 ---
 
-### 10) Troubleshooting quick tips
+### Troubleshooting quick tips
 
 - UI Route shows “Application is not available”:
   - Ensure the Service port is named “https”, targetPort=8080, and Route termination=passthrough.
