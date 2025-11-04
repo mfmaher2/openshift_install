@@ -19,3 +19,18 @@ Tip: To generate a bcrypt hash for dex-reset.yaml, see “Appendix: Generate a b
 ## 1) Install Mission Control (fresh cluster)
 
 This installs Mission Control into the mission-control namespace using your values files.
+# Create namespace
+oc new-project mission-control
+
+# Install Mission Control
+CHART_VERSION=1.15.0
+helm upgrade --install mission-control \
+  oci://registry.replicated.com/mission-control/mission-control \
+  -n mission-control \
+  -f values-defaults.yaml \
+  -f dex-reset.yaml \
+  -f disable-observability.yaml \
+  --version ${CHART_VERSION}
+
+# Watch pods
+oc get pods -n mission-control
