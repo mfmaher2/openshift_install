@@ -41,7 +41,7 @@ helm upgrade --install cert-manager jetstack/cert-manager \
   --version v1.14.5
 ```
 
-#** Verify CRDs and pods
+### Verify CRDs and pods
 ```bash
 oc get crd certificates.cert-manager.io issuers.cert-manager.io clusterissuers.cert-manager.io
 oc get pods -n cert-manager
