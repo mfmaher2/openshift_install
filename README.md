@@ -15,26 +15,24 @@ This guide walks through a clean install of Mission Control on OpenShift with fa
 Tip: To generate a bcrypt hash for dex-reset.yaml, see “Appendix: Generate a bcrypt hash”.
 
 ---
-# Select VM from Techzone
+### Select VM from Techzone
 ![Mission Control UI login screen](docs/images/techzone.png "Mission Control UI")
-# Select copy command from top right corner after logging into OpenShift Cluster Console
+### Select copy command from top right corner after logging into OpenShift Cluster Console
 ![Mission Control UI login screen](docs/images/logincmd.png "Mission Control UI")
-# Get Token to login into Openshift Cluster CLI
+### Get Token to login into Openshift Cluster CLI
 ![Mission Control UI login screen](docs/images/logintokencmd.png "Mission Control UI")
-# Install Cert-Manager (required upstream Helm)
+### Install Cert-Manager (required upstream Helm)
 Mission Control uses cert-manager CRDs (Certificate, Issuer, ClusterIssuer). Install upstream cert-manager via Helm:
 
-# Namespace
+### Namespace
 ```bash
 oc create namespace cert-manager || true
 ```
-
-# Install CRDs
+### Install CRDs
 ```bash
 kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.14.5/cert-manager.crds.yaml
 ```
-
-# Helm repo and install
+### Helm repo and install
 ```bash
 helm repo add jetstack https://charts.jetstack.io
 helm repo update
@@ -43,13 +41,13 @@ helm upgrade --install cert-manager jetstack/cert-manager \
   --version v1.14.5
 ```
 
-# Verify CRDs and pods
+#** Verify CRDs and pods
 ```bash
 oc get crd certificates.cert-manager.io issuers.cert-manager.io clusterissuers.cert-manager.io
 oc get pods -n cert-manager
 ```
 
-### Install Mission Control (fresh cluster)
+# Install Mission Control (fresh cluster)
 
 This installs Mission Control into the mission-control namespace using your values files.
 
@@ -141,7 +139,7 @@ oc rollout status  deploy/mission-control-dex -n mission-control
 ---
 
 ### Create a cluster (OpenShift SCC grant)
-# Select create cluster button
+### Select create cluster button
 ![Mission Control UI login screen](docs/images/createcluster.png "Mission Control UI")
 On OpenShift, Cassandra pods may be blocked by the default SCC when they request fixed UIDs/FSGroup. After creating your cluster from the UI:
 
