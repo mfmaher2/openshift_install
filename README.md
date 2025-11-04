@@ -20,7 +20,7 @@ Tip: To generate a bcrypt hash for dex-reset.yaml, see “Appendix: Generate a b
 # Select copy command from top right corner after logging into OpenShift Cluster Console
 ![Mission Control UI login screen](docs/images/logincmd.png "Mission Control UI")
 # Get Token to login into Openshift Cluster CLI
-![Mission Control UI login screen](docs/images/logintokenmcd.png "Mission Control UI")
+![Mission Control UI login screen](docs/images/logintokencmd.png "Mission Control UI")
 # Install Cert-Manager (required upstream Helm)
 Mission Control uses cert-manager CRDs (Certificate, Issuer, ClusterIssuer). Install upstream cert-manager via Helm:
 
