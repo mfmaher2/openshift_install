@@ -125,7 +125,7 @@ helm repo add mc-internal "${NEXUS_URL}/repository/helm-local/" \
 helm repo update
 helm search repo mc-internal/mission-control
 ```
-# Install cert‑manager (air‑gapped)
+## Install cert‑manager (air‑gapped)
 Mission Control creates cert-manager resources; install cert-manager from Nexus (after mirroring its chart and images).
 
 Download CRDs once (to include in your bundle)
@@ -183,7 +183,7 @@ helm upgrade --install cert-manager mc-internal/cert-manager \
 oc get crd certificates.cert-manager.io issuers.cert-manager.io clusterissuers.cert-manager.io
 oc get pods -n cert-manager
 ```
-# Prepare Mission Control values (air‑gapped)
+## Prepare Mission Control values (air‑gapped)
 Force all images to pull from Nexus (include required globals)
 ```bash
 # Pull secret for mission-control namespace
@@ -195,7 +195,7 @@ oc create secret docker-registry mc-regcred \
   -n mission-control
 ```
 
-# Install Mission Control from Nexus
+## Install Mission Control from Nexus
 ```bash
 CHART_VERSION=1.15.0
 helm upgrade --install mission-control mc-internal/mission-control \
@@ -230,7 +230,7 @@ Login:
   -  Username: admin@example.com
   -  Password: (the clear‑text password you hashed into dex‑reset.yaml)
 
-# Create clusters on OpenShift (SCC)
+## Create clusters on OpenShift (SCC)
 If the first Cassandra pod is rejected due to SCC (UID/fsGroup), grant anyuid to the ServiceAccount used by the StatefulSet in the cluster’s namespace, then recreate the pod:
 ```bash
 # Identify the SA used by the StatefulSet
@@ -245,7 +245,7 @@ oc delete pod -n <cluster-ns> <sts-name>-0
 oc scale sts -n <cluster-ns> <sts-name> --replicas=0
 oc scale sts -n <cluster-ns> <sts-name> --replicas=1
 ```
-# Troubleshooting
+## Troubleshooting
 - Chart rendering fails due to Loki/Mimir validations:
   - Template/install with observability disabled (loki.enabled=false, mimir.enabled=false, grafana.enabled=false).
 - Pods still pull from the internet:
