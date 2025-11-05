@@ -1,0 +1,3684 @@
+---
+# Source: mission-control/charts/aggregator/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: mission-control-aggregator
+  namespace: "mission-control"
+  labels:
+    helm.sh/chart: aggregator-0.41.7
+    app.kubernetes.io/name: aggregator
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/component: Aggregator
+    app.kubernetes.io/version: "0.49.0-distroless-libc"
+    app.kubernetes.io/managed-by: Helm
+    
+automountServiceAccountToken: true
+---
+# Source: mission-control/charts/dex/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: mission-control-dex
+  namespace: mission-control
+  labels:
+    helm.sh/chart: dex-0.23.0
+    app.kubernetes.io/name: dex
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/version: "2.42.0"
+    app.kubernetes.io/managed-by: Helm
+---
+# Source: mission-control/charts/k8ssandra-operator/charts/cass-operator/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: mission-control-cass-operator
+  labels:     
+    app.kubernetes.io/name: cass-operator
+    helm.sh/chart: cass-operator-0.61.1
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: k8ssandra-mission-control-mission-control
+secrets:
+  - name: mission-control-cass-operator-token
+---
+# Source: mission-control/charts/k8ssandra-operator/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: mission-control-k8ssandra-operator
+  labels:     
+    app.kubernetes.io/name: k8ssandra-operator
+    helm.sh/chart: k8ssandra-operator-1.27.0
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: k8ssandra-mission-control-mission-control
+secrets:
+  - name: mission-control-k8ssandra-operator-token
+---
+# Source: mission-control/charts/kube-state-metrics/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+automountServiceAccountToken: true
+metadata:
+  labels:    
+    helm.sh/chart: kube-state-metrics-5.31.0
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: metrics
+    app.kubernetes.io/part-of: kube-state-metrics
+    app.kubernetes.io/name: kube-state-metrics
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/version: "2.15.0"
+  name: mission-control-kube-state-metrics
+  namespace: mission-control
+---
+# Source: mission-control/charts/replicated/templates/replicated-serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    helm.sh/chart: replicated-1.0.0
+    app.kubernetes.io/name: replicated
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/version: "1.0.0"
+    app.kubernetes.io/managed-by: Helm
+  name: replicated
+  namespace: "mission-control"
+---
+# Source: mission-control/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: mission-control
+  labels:     
+    app.kubernetes.io/name: mission-control
+    helm.sh/chart: mission-control-1.15.0
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: k8ssandra-mission-control-mission-control
+secrets:
+  - name: mission-control-token
+---
+# Source: mission-control/charts/k8ssandra-operator/templates/serviceaccount-token.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mission-control-k8ssandra-operator-token
+  labels:     
+    app.kubernetes.io/name: k8ssandra-operator
+    helm.sh/chart: k8ssandra-operator-1.27.0
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: k8ssandra-mission-control-mission-control
+  annotations:
+    kubernetes.io/service-account.name: mission-control-k8ssandra-operator
+type: kubernetes.io/service-account-token
+---
+# Source: mission-control/charts/replicated/templates/replicated-secret.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  labels:
+    helm.sh/chart: replicated-1.0.0
+    app.kubernetes.io/name: replicated
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/version: "1.0.0"
+    app.kubernetes.io/managed-by: Helm
+  name: replicated
+  namespace: "mission-control"
+type: Opaque
+stringData:
+  config.yaml: |
+    license:    |
+      apiVersion: kots.io/v1beta1
+      kind: License
+      metadata:
+          name: datastaxsf0011500001mfsiqaah
+      spec:
+          appSlug: mission-control
+          channelID: 2H67dYyYBUwE2uwmKVJ5IfpTkmA
+          channelName: Stable
+          channels:
+              - channelID: 2H67dYyYBUwE2uwmKVJ5IfpTkmA
+                channelName: Stable
+                channelSlug: stable
+                endpoint: https://replicated.app
+                isDefault: true
+                isSemverRequired: true
+                replicatedProxyDomain: proxy.replicated.com
+          customerEmail: christopher.bradford@datastax.com
+          customerName: DataStax [sf:0011500001MFSiqAAH]
+          endpoint: https://replicated.app
+          entitlements:
+              expires_at:
+                  description: License Expiration
+                  signature:
+                      v1: KI6tdw+bVlonNjbe5DLV0LPA6PBxx2tyd1LG/Di6Pz5YO48MHcrRivb2l7eLknYSk/n4YJN/ojO5hiCglcQ+bjOpD+PgEDg8RsmKU4Apx6Ka87mC5DdKz8Y/OjiFsvmXIMGJvklGU0DYKJZuo6wbJy+Qimai/68N372R+4N1frPaK1m0ekf2X/8FsKEFUX45nBE9I5coietCxgryWEyPEibxEK7Pdus4lA7G9z8H9Xowyf/zq1BYjwsWWf+W9JCip4V1dPgm1bVkHuiJ7h+hySWYyBSuqAj+Tq897jXmHUmm4VP/Z0Kwm4dKCs9kmgxd/jhyO5sWmec5ihXHXbVL3Q==
+                  title: Expiration
+                  value: ""
+                  valueType: String
+          isAirgapSupported: true
+          isEmbeddedClusterDownloadEnabled: true
+          isEmbeddedClusterMultiNodeEnabled: true
+          isKotsInstallEnabled: true
+          isSemverRequired: true
+          licenseID: 2bxeFR9KDybcSrdAKv5wmPmsbbc
+          licenseSequence: 27
+          licenseType: dev
+          replicatedProxyDomain: proxy.replicated.com
+          signature: eyJsaWNlbnNlRGF0YSI6ImV5SmhjR2xXWlhKemFXOXVJam9pYTI5MGN5NXBieTkyTVdKbGRHRXhJaXdpYTJsdVpDSTZJa3hwWTJWdWMyVWlMQ0p0WlhSaFpHRjBZU0k2ZXlKdVlXMWxJam9pWkdGMFlYTjBZWGh6WmpBd01URTFNREF3TURGdFpuTnBjV0ZoYUNKOUxDSnpjR1ZqSWpwN0lteHBZMlZ1YzJWSlJDSTZJakppZUdWR1VqbExSSGxpWTFOeVpFRkxkalYzYlZCdGMySmlZeUlzSW14cFkyVnVjMlZVZVhCbElqb2laR1YySWl3aVkzVnpkRzl0WlhKT1lXMWxJam9pUkdGMFlWTjBZWGdnVzNObU9qQXdNVEUxTURBd01ERk5SbE5wY1VGQlNGMGlMQ0poY0hCVGJIVm5Jam9pYldsemMybHZiaTFqYjI1MGNtOXNJaXdpWTJoaGJtNWxiRWxFSWpvaU1rZzJOMlJaZVZsQ1ZYZEZNblYzYlV0V1NqVkpabkJVYTIxQklpd2lZMmhoYm01bGJFNWhiV1VpT2lKVGRHRmliR1VpTENKamRYTjBiMjFsY2tWdFlXbHNJam9pWTJoeWFYTjBiM0JvWlhJdVluSmhaR1p2Y21SQVpHRjBZWE4wWVhndVkyOXRJaXdpWTJoaGJtNWxiSE1pT2x0N0ltTm9ZVzV1Wld4SlJDSTZJakpJTmpka1dYbFpRbFYzUlRKMWQyMUxWa28xU1dad1ZHdHRRU0lzSW1Ob1lXNXVaV3hUYkhWbklqb2ljM1JoWW14bElpd2lZMmhoYm01bGJFNWhiV1VpT2lKVGRHRmliR1VpTENKcGMwUmxabUYxYkhRaU9uUnlkV1VzSW1WdVpIQnZhVzUwSWpvaWFIUjBjSE02THk5eVpYQnNhV05oZEdWa0xtRndjQ0lzSW5KbGNHeHBZMkYwWldSUWNtOTRlVVJ2YldGcGJpSTZJbkJ5YjNoNUxuSmxjR3hwWTJGMFpXUXVZMjl0SWl3aWFYTlRaVzEyWlhKU1pYRjFhWEpsWkNJNmRISjFaWDFkTENKc2FXTmxibk5sVTJWeGRXVnVZMlVpT2pJM0xDSmxibVJ3YjJsdWRDSTZJbWgwZEhCek9pOHZjbVZ3YkdsallYUmxaQzVoY0hBaUxDSnlaWEJzYVdOaGRHVmtVSEp2ZUhsRWIyMWhhVzRpT2lKd2NtOTRlUzV5WlhCc2FXTmhkR1ZrTG1OdmJTSXNJbVZ1ZEdsMGJHVnRaVzUwY3lJNmV5SmxlSEJwY21WelgyRjBJanA3SW5ScGRHeGxJam9pUlhod2FYSmhkR2x2YmlJc0ltUmxjMk55YVhCMGFXOXVJam9pVEdsalpXNXpaU0JGZUhCcGNtRjBhVzl1SWl3aWRtRnNkV1VpT2lJaUxDSjJZV3gxWlZSNWNHVWlPaUpUZEhKcGJtY2lMQ0p6YVdkdVlYUjFjbVVpT25zaWRqRWlPaUpMU1RaMFpIY3JZbFpzYjI1T2FtSmxOVVJNVmpCTVVFRTJVRUo0ZURKMGVXUXhURWN2UkdrMlVIbzFXVTgwT0UxSVkzSlNhWFppTW13M1pVeHJibGxUYXk5dU5GbEtUaTl2YWs4MWFHbERaMnhqVVN0aWFrOXdSQ3RRWjBWRVp6aFNjMjFMVlRSQmNIZzJTMkU0TjIxRE5VUmtTM280V1M5UGFtbEdjM1p0V0VsTlIwcDJhMnhIVlRCRVdVdEtXblZ2Tm5kaVNua3JVV2x0WVdrdk5qaE9NemN5VWlzMFRqRm1jbEJoU3pGdE1HVnJaakpZTHpoR2MwdEZSbFZZTkRWdVFrVTVTVFZqYjJsbGRFTjRaM0o1VjBWNVVFVnBZbmhGU3pkUVpIVnpOR3hCTjBjNWVqaElPVmh2ZDNsbUwzcHhNVUpaYW5kelYxZG1LMWM1U2tOcGNEUldNV1JRWjIweFlsWnJTSFZwU2pkb0syaDVVMWRaZVVKVGRYRkJhaXRVY1RnNU4ycFliVWhWYlcwMFZsQXZXakJMZDIwMFpFdERjemxyYldkNFpDOXFhSGxQTlhOWGJXVmpOV2xvV0VoWVlsWk1NMUU5UFNKOWZYMHNJbWx6UVdseVoyRndVM1Z3Y0c5eWRHVmtJanAwY25WbExDSnBjMFZ0WW1Wa1pHVmtRMngxYzNSbGNrUnZkMjVzYjJGa1JXNWhZbXhsWkNJNmRISjFaU3dpYVhORmJXSmxaR1JsWkVOc2RYTjBaWEpOZFd4MGFVNXZaR1ZGYm1GaWJHVmtJanAwY25WbExDSnBjMHR2ZEhOSmJuTjBZV3hzUlc1aFlteGxaQ0k2ZEhKMVpTd2lhWE5UWlcxMlpYSlNaWEYxYVhKbFpDSTZkSEoxWlgxOSIsImlubmVyU2lnbmF0dXJlIjoiZXlKc2FXTmxibk5sVTJsbmJtRjBkWEpsSWpvaVYxa3llVVJyT1dzNVprVklUVlZDUVV3ME1UZEpUVzFuZUc5NlQwczVVV1JoVFc1T09VVmFTREY1UlZkWWFUVTFOM2hEVjFWcE1XbFZSMUozYUd0NWJWSjFaRE5EVnpRd1dXVlBkMnRsVUU5WlNrUnZWRTFFZURKRlJDOVdLekZsWlRKVWRrWlJZV2RGVjFOVVYySnlXRlpvYzFaTk1qUnhVekZvZHl0dVVWQkhWVVJOVDJ4cGIyUmpiMU42Vm5GQ2FVcFdkWGhOZGpWTFdYVXpVazFtYmtoU1RrY3pNMkYwVHpaYVUxSnFZalJNY0ZWSE1GcHpVbkExYzJadE5rRkdUVVJwTkVkSGFtNXRXR1ZFWWpsSVNrdFFSbXBFUlVSRlR6aHFaV2NyU1VKM1MyNURSbXNyVFd4T2NWSXpURE5aVjA1MWRUSkJabEZDZVdabllsSkRNa1pZYVdWS1JWZHlXRFpCSzNjMWJqVTNha0lyUWpVMFdrZFNlR0UxU1hwMmFYSlFhRkI0YzFkTU5WQTFOemxhV0c1clNrZzJiWFl5WldaM1NYRm1PWEl4UWpSdE5FVkhVazk2U0hsdFdFWjFUV3BtYkd0blBUMGlMQ0p3ZFdKc2FXTkxaWGtpT2lJdExTMHRMVUpGUjBsT0lGQlZRa3hKUXlCTFJWa3RMUzB0TFZ4dVRVbEpRa2xxUVU1Q1oydHhhR3RwUnpsM01FSkJVVVZHUVVGUFEwRlJPRUZOU1VsQ1EyZExRMEZSUlVGeFJXeDBUR2RLSzNBNWJYWlVSMFkzWldKWVkxeHVZMjR4TjBwRlkzWkdOMmxHUkVOUWFVMWxjMkp4ZEZaNFN6WTNWVk5hVUdWbk0xVnJPRXBCY1cxQ05HcExhbWRzZUdwSlFXMXlZM0oxWTBFd1ZtVnRWRnh1TlVKQk4zWk5hRmhPUzJwaGREbEhWbTFJV2twQmVXRk1ZV3hsYXl0d2RYWTFUWGxST1drME1VZHJUMFpYT1RaRldUWkxSbGw2T0ZST1FWUlBia3hsZVZ4dVdFbFVXVGRQS3pkT05UUTVjbk56TlhsWVNFVnVSa0ZoVG01NmNWbEtXRWRYVEhkMFVuUXhUWHBTWlUwd2NrMDFWelUwV1dWbk5FTlFRbGRtWnl0NWNseHVPWFYwWldWNVFscE1MMGhvT0dOR1kxaGtaWGdyYUZJeVRpdHBRaTkxVnpkbmVFaDFlazVQV0hkSU1FZG9WVmhTTVhCRFZWQXdWbnBWT1hOaGVEZGpaMXh1YkVwVGFGbHRTV2xHYlhkbU1tUm9hVzV1WWsxcFZUWmlaRTR4ZHpRMVQxcHBPRmR2Y1Rrd1Jsa3pVRmhNVkRkUWNXRlZXVWRyVUhCU2R6VTRVMVFyUlZ4dUszZEpSRUZSUVVKY2JpMHRMUzB0UlU1RUlGQlZRa3hKUXlCTFJWa3RMUzB0TFZ4dUlpd2lhMlY1VTJsbmJtRjBkWEpsSWpvaVpYbEtlbUZYWkhWWldGSXhZMjFWYVU5cFNuRlpWR3hGWWpOQk5XVkhaSE5UUjJoVlZXMTBZVlZGVGpOaVJrcFlZa2RhV0U1WGVFMWFWVm93WVZkU1NHTklaekJVZWs1S1VrWkJlRlJJVmtwYU1ITjJaVzVrVkU5SFRqTmpNVTVIVDBoS2VGUlZNSGhqUjFwMllUSm9NVko2Um5sUk1XaFVWakJOZDJFeVpHOWhSV1J5VjFjeFRsWkhlRTVpVm14VllrWmFVMk51U2tkVFZVNVVVbXBXYldGV1pFcGFWR1JhVTJsMGQyUldSbmxVYWxKdFQxVmtWRXN6Y0dGV1JURjJVVEZTUWs1WVVURmxiVmt5VmxWa01WcEdVbGxXTWxWNVVsVXhNbHB0V2xKUmExVXhWVU56Y2xSRVRuSmpSbWhEWVdwQ00xZHNhSFpNTTFwR1YxVm9jbUY2VWxGV00zQlBWRE5qY2xSVVZsWmhSVGx1VkZjNVRHVldVbkJVYXpGR1YwVkdXRkpIVFhkYU1teHZUbWs0ZUU0eFZUTlhWMFYzVFZob2NWTlRkRXhUZVhRMlVXcFJNR1ZGTURSVVZHeE1ZMGRhVkdOWWFFWlRhMDVIVWpBeFNHSnFSbGxTTUZaQ1pHeG5jbEZZUlRSVE1qVlJWVWRrVTA0eFdrdFNNbHBWVGtkR05tTkhPVzVrUld4cllXMUdNR1JYVms5a01uaFpWMjF3TkZaR1RUTmhNakZYVVcxNE1sVkViSEpaV0Zwc1RESTFjbFJYWkc1U2JtaElXVlV4ZWxKV1dtOVpNbFowV1ZaSk5XRkZWWGRXUm14cVlrUk9XazFJWXpsUVUwbHpTVzFrYzJJeVNtaGlSWFJzWlZWc2EwbHFiMmxaYlZKc1dsUlZNazVVV1hkWk1scHBUa1JPYWs5WFNYbFBSMHB0VDFSb2JGbFhUbWhhYlVVeVRrUlphV1pSUFQwaWZRPT0ifQ==
+    licenseFields:
+      expires_at:
+        description: License Expiration
+        name: expires_at
+        signature:
+          v1: emvY+JnET3kOLMnPPqCi7UYgEH1csvY/Sty8d4Dz84Iwd0eKKiZKy6365EWQgGEnkjHvHIOuxcJp9asRvysZUKynXlIGFZ0KAAR7Lb+uBMTGnMYsO+kxjcIcxHBsFU7+7IEpHDOCTFvdpb2zJtedDxZeQNLjUaZah5nNgQyRQS/rF/m100F97XePxrTQX04oFpxSNaRpARiM0y33AGGhFYNRnudPL4M+RIVKPnqTSlPpdqy9EPSf7WSxatAAtwE6/id00UhHyQs7yl97Ed6V/s8+ZmfjnxsQ1DwgsGxKK7ctW6SaQb2w4Ck5wsysvJHbVKxs38vGwm01/9KJ5+TvDg==
+        title: Expiration
+        value: ""
+        valueType: String
+    appName: "Mission Control"
+    channelID: "2H67dYyYBUwE2uwmKVJ5IfpTkmA"
+    channelName: "Stable"
+    channelSequence: 33
+    releaseSequence: 7377
+    releaseCreatedAt: "2025-09-30T12:36:16Z"
+    releaseNotes: |-
+      # Release Notes
+      
+      ### Container images configuration revamp
+      
+      This version of Mission Control brings in k8ssandra-operator version 1.27 and cass-operator v1.27 which modify how image coordinates are defined across all operators, using a unified structure.
+      A new `.global.imageConfig` struct is now available in the Helm values allowing coordinates overrides for all images:
+      
+      ```
+      global:
+        imageConfig:
+          images:
+            # system-logger:
+            #   repository: "k8ssandra"
+            #   name: "system-logger"
+            #   tag: "v1.27.1"
+            # config-builder:
+            #   repository: "datastax"
+            #   name: "cass-config-builder"
+            #   tag: "1.0-ubi"
+            # k8ssandra-client:
+            #   repository: "k8ssandra"
+            #   name: "k8ssandra-client"
+            #   tag: "v0.8.3"
+            #   # pullSecret: "k8ssandra-client-pull-secret" # Use of pullSecret removes the default pullSecrets for this image
+            #   # pullPolicy: Always
+            # cql-router:
+            #   registry: "proxy.replicated.com"
+            #   repository: "proxy/mission-control/559669398656.dkr.ecr.us-west-2.amazonaws.com/mission-control"
+            #   name: "cql-router"
+            #   tag: "96e59d8d"
+            # cqlsh:
+            #   registry: "proxy.replicated.com"
+            #   repository: "proxy/mission-control/559669398656.dkr.ecr.us-west-2.amazonaws.com/mission-control"
+            #   name: "cqlsh-pod"
+            #   tag: "37e472f9"
+            # data-api:
+            #   repository: "stargateio"
+            #   name: "data-api"
+            #   tag: "v1.0.32"
+            # reaper:
+            #   registry: docker.io
+            #   repository: "thelastpickle"
+            #   name: "cassandra-reaper"
+            #   tag: "4.0.0"
+            # medusa:
+            #   registry: docker.io
+            #   repository: "k8ssandra"
+            #   name: "medusa"
+            #   tag: "0.25.1"
+          # -- overrides will apply to all images discarding the settings in defaults or what individual images might have.
+          # overrides:
+            # -- registry to pull from
+            # registry: "private-registry.local"
+            # -- repository to use discarding all the other settings. If set to empty, repository part will be removed from the image path.
+            # repository: "enterprise"
+            # -- pullPolicy override the pullPolicy of images
+            # pullPolicy: Never
+            # -- pullSecrets removes all the other pullSecrets when used. Setting as empty array will remove pullSecrets from use.
+            # pullSecrets:
+            #   - "my-secret-pull-registry"
+            # -- types are used as building blocks when serverVersion + serverType in the CassandraDatacenter is used
+          # -- defaults are used when other no override is present for the configured image or image type. All these values can be overridden under any image or image type.
+          # defaults:
+          #   registry: "docker.io"
+          #   pullPolicy: IfNotPresent
+          #   pullSecrets:
+          #     - "{{ .Release.Name}}-registry"
+          # types:
+          #   hcd:
+          #     registry: "proxy.replicated.com"
+          #     repository: "proxy/mission-control/559669398656.dkr.ecr.us-west-2.amazonaws.com/engops-shared/hcd/prod"
+          #     name: "hcd"
+          #     suffix: "-ubi"
+          #   cassandra:
+          #     repository: "k8ssandra"
+          #     name: "cass-management-api"
+          #     suffix: "-ubi"
+          #   dse:
+          #     repository: "datastax"
+          #     name: "dse-mgmtapi-6_8"
+          #     suffix: "-ubi"
+      ```
+      
+      In order to override the registry for all images to point to `my-registry.company.com:5000` for example, you can configure your values as follows (common case for airgap installations):
+      
+      ```
+      global:
+        imageConfig:
+          overrides:
+            registry: "my-registry.company.com:5000"
+      ```
+      The above would override the registry for all images, including the images that would have specific registry overrides.
+      
+      If specific images should be pulled from yet another registry, they can have overridden individually while the rest of the images rely on defaults:
+      
+      ```
+      global:
+        imageConfig:
+          defaults:
+            registry: "my-registry.company.com:5000"
+            pullPolicy: IfNotPresent
+          images:
+            cql-router:
+              registry: "yetanother.registry.com"
+            cqlsh:
+              registry: "yetanother.registry.com"
+          types:
+            hcd:
+              registry: "yetanother.registry.com"
+      ```
+      
+      Each element (registry, repository, name and tag) can be overridden individually. The operators will merge the overrides with the default values automatically.
+      
+      As of MC v1.15, only the following images have registry overrides by default:
+      - cql-router
+      - cqlsh-pod
+      - hcd
+      
+      All other images are using the default registry.
+      
+      ### Custom alerts definition
+      
+      This version introduces the ability to define custom alerts in the Helm values.
+      Such alerts follow the Prometheus alert manager format.
+      For example:
+      
+      ```
+      alerting:
+        customRules: |
+          - alert: my-custom-alert-rule
+            annotations:
+              context: ""
+              description: test alert
+              summary: test alert
+            expr: <promql expression>
+            for: 1m
+            labels:
+              group: ""
+              severity: warning
+      ```
+      
+      Such alerts will be deployed in the `mission-control-ruler-custom-config` ConfigMap, in the `custom-rules.yml` entry.
+      Rules created in the UI will now be persisted in the same configmap, under the `ui-rules.yml` entry in the same configmap.
+      
+      ### Dependency upgrades
+      - cass-operator v1.27.1
+      - k8ssandra-operator v1.27.0
+      - Dex v2.44.0
+      - Nginx v1.28
+      - k8s-sidecar v1.30.10
+      - Data API v1.0.32
+      - Minio RELEASE.2025-09-07T16-13-09Z and mc RELEASE.2025-08-13T08-35-41Z
+      - Medusa v0.25.1
+      - Reaper v4.0.0 (final)
+      - cqlsh-pod d6dcf587
+      - cql-router ed96e7c4
+      
+      # Changelog
+      
+      ## Mission Control v1.15.0 - 2025-09-29
+      
+      * [CHANGE] Upgrade k8ssandra-operator to v1.27.0 and cass-operator to v1.27.1
+      * [CHANGE] Update dex to v2.44.0, nginx to v1.28 and minio/mc to their latest releases
+      * [CHANGE] Update k8s-sidecar to 1.30.10
+      * [ENHANCEMENT] Add support for additional volumes and mounts in Mission Control UI / API server Deployment.
+      * [ENHANCEMENT] Allow to define separate image configuration for cqlsh and cql-router
+      * [ENHANCEMENT] All images have now structured format for setting each individual component (registry, repository, tag, name)
+      * [ENHANCEMENT] Forbid privilege escalation in mission control operator pod
+      * [ENHANCEMENT] Update to Vector 0.49.0 and set expire_metrics_secs to 3600s for prometheus_remote_write sinks. This prevents infinite memory growth from unique incremental metrics
+      * [ENHANCEMENT] Allow defining custom alert rules through Helm values
+      * [BUGFIX] Revert app label changes on the mission-control-ui deployment which was breaking upgrades
+      
+      ## k8ssandra-operator v1.27.0 - 2025-09-26
+      
+      * [CHANGE] Upgrade Reaper to v4.0.0 and Medusa to v0.25.1
+      * [FEATURE] [#1605](https://github.com/k8ssandra/k8ssandra-operator/issues/1605) Container images, tags, repositories, registry and pullsecrets and now centrally managed in a ConfigMap with label `k8ssandra.io/config: image`. This is shared with the cass-operator and allows to configure everything from a single place. perNodeConfig is using k8ssandra-client as the image name.
+      * [ENHANCEMENT] [#1591](https://github.com/k8ssandra/k8ssandra-operator/issues/1591) Remove the old medusa purge cronjob in favor of scheduled tasks
+      * [ENHANCEMENT] [#1245](https://github.com/k8ssandra/k8ssandra-operator/issues/1245) Ensure ReplicatedSecret targets are cleaned up correctly
+      * [BUGFIX] [#1603](https://github.com/k8ssandra/k8ssandra-operator/issues/1603) Fix the crd-upgrader to update cass-operator CRDs also as part of the Helm upgrade
+      * [BUGFIX] [#1610](https://github.com/k8ssandra/k8ssandra-operator/issues/1610) Replace all Medusa setControllerReference with setOwnerReference when targetting CassandraDatacenter objects
+      * [BUGFIX] [#1618](https://github.com/k8ssandra/k8ssandra-operator/issues/1618) If two datacenters with same clusterName were present in different namespaces, it was possible that the wrong one was picked when checking the status of the restore. 
+      * [TESTING] Remove the kuttl tests in CI
+      
+      ## cass-operator v1.27.1
+      
+      * [CHANGE] [#845](https://github.com/k8ssandra/cass-operator/issues/845) Set default registry to be docker.io on the releases to allow easier modification using new ImageConfig
+      * [BUGFIX] [#843](https://github.com/k8ssandra/cass-operator/issues/843) If MetadataVersion was for some reason missing from Status while the DatacenterName was set to same value as dc.Name and the count of nodes was same as maximum seed count for a rack, the seed labeler would overflow thinking it had too many seeds and remove the existing seeds from such racks.
+      
+      ## cass-operator v1.27.0
+      
+      * [CHANGE] [#822](https://github.com/k8ssandra/cass-operator/issues/822) Remove certain RBAC rights from our Role/ClusterRole that are no longer necessary for the operations in cass-operator
+      * [FEATURE] [#830](https://github.com/k8ssandra/cass-operator/issues/830) Implement new ImageConfig structure where all the parts of the configured images are split to individual components to allow simpler configuration. This allows to override a single value only (such as registry for single image) in the Helm charts. The configuration is moved to a separate ConfigMap with `k8ssandra.io/config: image` label and this same ImageConfig is then used in the k8ssandra-operator to ensure all the components are configured from a single place.
+      * [FEATURE] [#824](https://github.com/k8ssandra/cass-operator/issues/824) Setting `cassandra.datastax.com/disable-pdb-creation: true` to the CassandraDatacenter will now disable creation of PodDisruptionBudget for the datacenter
+      * [ENHANCEMENT] [#827](https://github.com/k8ssandra/cass-operator/issues/827) Add a new watch handler for caches in the startup of controller-runtime. If the caches have failures, we should exit the operator and let it restart. This would alert the user that the operator has issues instead of simply logging these errors.
+      * [ENHANCEMENT] [#831](https://github.com/k8ssandra/cass-operator/issues/831) Add support for Jobs argument in the gargabecollect command for CassandraTask
+      * [ENHANCEMENT] [#833](https://github.com/k8ssandra/cass-operator/issues/833) AdditionalVolumes with VolumeSource (Secret, ConfigMap) are now mounted to the server-config-init initContainer also.
+    versionLabel: "v1.15.0"
+    replicatedAppEndpoint: "https://replicated.app"
+    statusInformers: null
+    replicatedID: ""
+    appID: ""
+  # kindIs "invalid" indicates that the value is nil and the user did not provide a value
+  integration-enabled: "false"
+---
+# Source: mission-control/charts/replicated/templates/replicated-supportbundle.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  labels:
+    helm.sh/chart: replicated-1.0.0
+    app.kubernetes.io/name: replicated
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/version: "1.0.0"
+    app.kubernetes.io/managed-by: Helm
+    troubleshoot.sh/kind: support-bundle
+  name: replicated-supportbundle
+  namespace: "mission-control"
+stringData:
+  support-bundle-spec: |-
+    apiVersion: troubleshoot.sh/v1beta2
+    kind: SupportBundle
+    metadata:
+      name: replicated-supportbundle
+    spec:
+      collectors:
+        - exec:
+            name: replicated-sdk
+            collectorName: replicated-app-updates
+            selector:
+              - app.kubernetes.io/instance=mission-control
+              - app.kubernetes.io/managed-by=Helm
+              - app.kubernetes.io/name=replicated
+              - app.kubernetes.io/version=1.0.0
+              - helm.sh/chart=replicated-1.0.0
+            namespace: mission-control
+            command: ["curl"]
+            args: ["-s", "http://replicated.mission-control:3000/api/v1/app/updates"]
+            timeout: 5s
+        - exec:
+            name: replicated-sdk
+            collectorName: replicated-app-history
+            selector:
+              - app.kubernetes.io/instance=mission-control
+              - app.kubernetes.io/managed-by=Helm
+              - app.kubernetes.io/name=replicated
+              - app.kubernetes.io/version=1.0.0
+              - helm.sh/chart=replicated-1.0.0
+            namespace: mission-control
+            command: ["curl"]
+            args: ["-s", "http://replicated.mission-control:3000/api/v1/app/history"]
+            timeout: 5s
+        - exec:
+            name: replicated-sdk
+            collectorName: replicated-app-info
+            selector:
+              - app.kubernetes.io/instance=mission-control
+              - app.kubernetes.io/managed-by=Helm
+              - app.kubernetes.io/name=replicated
+              - app.kubernetes.io/version=1.0.0
+              - helm.sh/chart=replicated-1.0.0
+            namespace: mission-control
+            command: ["curl"]
+            args: ["-s", "http://replicated.mission-control:3000/api/v1/app/info"]
+            timeout: 5s
+        - exec:
+            name: replicated-sdk
+            collectorName: replicated-license-info
+            selector:
+              - app.kubernetes.io/instance=mission-control
+              - app.kubernetes.io/managed-by=Helm
+              - app.kubernetes.io/name=replicated
+              - app.kubernetes.io/version=1.0.0
+              - helm.sh/chart=replicated-1.0.0
+            namespace: mission-control
+            command: ["curl"]
+            args: ["-s", "http://replicated.mission-control:3000/api/v1/license/info"]
+            timeout: 5s
+        - logs:
+            collectorName: replicated-logs
+            selector:
+              - app.kubernetes.io/instance=mission-control
+              - app.kubernetes.io/managed-by=Helm
+              - app.kubernetes.io/name=replicated
+              - app.kubernetes.io/version=1.0.0
+              - helm.sh/chart=replicated-1.0.0
+            namespace: "mission-control"
+            name: replicated/logs
+        - secret:
+            namespace: "mission-control"
+            name: replicated-instance-report
+            includeValue: true
+            key: report
+        - secret:
+            namespace: "mission-control"
+            name: replicated-custom-app-metrics-report
+            includeValue: true
+            key: report
+        - secret:
+            namespace: "mission-control"
+            name: replicated-meta-data
+            includeValue: true
+            key: instance-tag-data 
+      analyzers:
+        - jsonCompare:
+            checkName: Replicated SDK App Status
+            fileName: replicated-app-info.json
+            path: "appStatus"
+            value: "ready"
+            outcomes:
+              - warn:
+                  when: "false"
+                  message: Replicated SDK App status is not ready.
+              - pass:
+                  when: "true"
+                  message: Replicated SDK App status is ready.
+---
+# Source: mission-control/templates/dex-secret.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mission-control-ui-dex-config
+  labels:     
+    app.kubernetes.io/name: mission-control
+    helm.sh/chart: mission-control-1.15.0
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: k8ssandra-mission-control-mission-control
+type: Opaque
+data:
+  config.yaml: "ZW5hYmxlUGFzc3dvcmREQjogZmFsc2UKZnJvbnRlbmQ6CiAgaXNzdWVyOiBNaXNzaW9uIENvbnRyb2wKZ3JwYzoKICBhZGRyOiAxMjcuMC4wLjE6NTU1Nwppc3N1ZXI6IGh0dHA6Ly9taXNzaW9uLWNvbnRyb2wtZGV4OjU1NTYvZGV4CnN0YXRpY0NsaWVudHM6Ci0gaWQ6IG1pc3Npb24tY29udHJvbC11aQogIG5hbWU6IE1pc3Npb24gQ29udHJvbCBHVUkKICByZWRpcmVjdFVSSXM6CiAgLSAvdjEvYXV0aC9jYWxsYmFjawogIHNlY3JldDogWlhoaGJYQnNaUzFoY0hBdGMyVmpjbVYwCnN0b3JhZ2U6CiAgY29uZmlnOgogICAgaW5DbHVzdGVyOiB0cnVlCiAgdHlwZToga3ViZXJuZXRlcwp0ZWxlbWV0cnk6CiAgaHR0cDogMTI3LjAuMC4xOjU1NTgKd2ViOgogIGh0dHA6IDEyNy4wLjAuMTo1NTU2"
+---
+# Source: mission-control/templates/mission-control-registry.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mission-control-registry
+  annotations:
+    mission-control.datastax.com/manager: helm
+  labels:     
+    app.kubernetes.io/name: mission-control
+    helm.sh/chart: mission-control-1.15.0
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: k8ssandra-mission-control-mission-control
+    mission-control.datastax.com/config: "registry"
+type: kubernetes.io/dockerconfigjson
+data:
+  .dockerconfigjson: eyJhdXRocyI6eyJwcm94eS5yZXBsaWNhdGVkLmNvbSI6eyJhdXRoIjoiTW1KNFpVWlNPVXRFZVdKalUzSmtRVXQyTlhkdFVHMXpZbUpqT2pKaWVHVkdVamxMUkhsaVkxTnlaRUZMZGpWM2JWQnRjMkppWXc9PSJ9LCJyZWdpc3RyeS5yZXBsaWNhdGVkLmNvbSI6eyJhdXRoIjoiTW1KNFpVWlNPVXRFZVdKalUzSmtRVXQyTlhkdFVHMXpZbUpqT2pKaWVHVkdVamxMUkhsaVkxTnlaRUZMZGpWM2JWQnRjMkppWXc9PSJ9fX0=
+---
+# Source: mission-control/templates/serviceaccount-token.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mission-control-token
+  labels:     
+    app.kubernetes.io/name: mission-control
+    helm.sh/chart: mission-control-1.15.0
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: k8ssandra-mission-control-mission-control
+  annotations:
+    kubernetes.io/service-account.name: mission-control
+type: kubernetes.io/service-account-token
+---
+# Source: mission-control/charts/aggregator/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mission-control-aggregator
+  namespace: "mission-control"
+  labels:
+    helm.sh/chart: aggregator-0.41.7
+    app.kubernetes.io/name: aggregator
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/component: Aggregator
+    app.kubernetes.io/version: "0.49.0-distroless-libc"
+    app.kubernetes.io/managed-by: Helm
+    
+data:
+  vector.yaml: |
+    api:
+      address: 127.0.0.1:8686
+      enabled: true
+      playground: false
+    data_dir: /vector-data-dir
+    sinks:
+
+      loki:
+        encoding:
+          codec: json
+        endpoint: http://mission-control-loki-gateway
+        inputs:
+        - vector_with_defaults
+        - syslog
+        labels:
+          cluster: '{{ cluster }}'
+          container_name: '{{ container_name }}'
+          datacenter: '{{ datacenter }}'
+          file: '{{ file }}'
+          namespace: '{{ namespace }}'
+          pod_name: '{{ pod_name }}'
+          rack: '{{ rack }}'
+          source_type: '{{ source_type }}'
+        out_of_order_action: accept
+        request:
+          retry_attempts: 1
+        tenant_id: anonymous
+        type: loki
+      mimir:
+        endpoint: http://mission-control-mimir-nginx/api/v1/push
+        expire_metrics_secs: 3600
+        inputs:
+        - vector
+        - internal_metrics
+        - kube_state_metrics
+        - cass_operator_metrics
+        - mimir-self-monitoring
+        - prometheus_push
+        - statsd
+        request:
+          retry_attempts: 1
+        type: prometheus_remote_write
+    sources:
+
+      cass_operator_metrics:
+        endpoints:
+        - http://mission-control-cass-operator-metrics:8080/metrics
+        type: prometheus_scrape
+      internal_metrics:
+        type: internal_metrics
+      kube_state_metrics:
+        endpoints:
+        - http://mission-control-kube-state-metrics:8080/metrics
+        type: prometheus_scrape
+      mimir-self-monitoring:
+        endpoints:
+        - http://mission-control-mimir-alertmanager:8080/metrics
+        - http://mission-control-mimir-compactor:8080/metrics
+        - http://mission-control-mimir-distributor:8080/metrics
+        - http://mission-control-mimir-ingester:8080/metrics
+        - http://mission-control-mimir-querier:8080/metrics
+        - http://mission-control-mimir-ruler:8080/metrics
+        - http://mission-control-mimir-query-frontend:8080/metrics
+        - http://mission-control-mimir-query-scheduler:8080/metrics
+        - http://mission-control-mimir-store-gateway:8080/metrics
+        type: prometheus_scrape
+      prometheus_push:
+        address: 0.0.0.0:9090
+        expire_metrics_secs: 3600
+        type: prometheus_remote_write
+      statsd:
+        address: 0.0.0.0:8125
+        mode: tcp
+        type: statsd
+      syslog:
+        address: 0.0.0.0:9000
+        mode: tcp
+        type: syslog
+      vector:
+        address: 0.0.0.0:6000
+        type: vector
+        version: "2"
+    transforms:
+
+      vector_with_defaults:
+        inputs:
+        - vector
+        source: |-
+          if !exists(.namespace) {
+            if exists(.kubernetes.pod_namespace) {
+              .namespace = del(.kubernetes.pod_namespace)
+            } else {
+              .namespace = "unknown"
+            }
+          }
+          if !exists(.pod_name) {
+            if exists(.kubernetes.pod_name) {
+              .pod_name = del(.kubernetes.pod_name)
+            } else {
+              .pod_name = "unknown"
+            }
+          }
+          if !exists(.container_name) {
+            if exists(.kubernetes.container_name) {
+              .container_name = del(.kubernetes.container_name)
+            } else {
+              .container_name = "unknown"
+            }
+          }
+          if !exists(.file) { .file = "unknown" }
+          if !exists(.cluster) { .cluster = "unknown" }
+          if !exists(.datacenter) { .datacenter = "unknown" }
+          if !exists(.rack) { .rack = "unknown" }
+        type: remap
+---
+# Source: mission-control/charts/k8ssandra-operator/charts/cass-operator/templates/configmap.yaml
+kind: ConfigMap
+metadata:
+  name: mission-control-cass-operator-manager-config
+  labels:     
+    app.kubernetes.io/name: cass-operator
+    helm.sh/chart: cass-operator-0.61.1
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: k8ssandra-mission-control-mission-control
+    k8ssandra.io/config: "manager"
+apiVersion: v1
+data:
+  controller_manager_config.yaml: |
+    apiVersion: config.k8ssandra.io/v1beta1
+    kind: OperatorConfig
+    health:
+      healthProbeBindAddress: :8081
+    metrics:
+      bindAddress: :8080
+    webhook:
+      port: 9443
+    leaderElection:
+      leaderElect: true
+      resourceName: b569adb7.cassandra.datastax.com
+    disableWebhooks: false
+    imageConfigFile: /configs/image_config.yaml
+  image_config.yaml: |
+    apiVersion: config.k8ssandra.io/v1beta1
+    kind: ImageConfig
+    images:
+      system-logger: docker.io/k8ssandra/system-logger:v1.27.1
+      config-builder: docker.io/datastax/cass-config-builder:1.0-ubi
+      k8ssandra-client: docker.io/k8ssandra/k8ssandra-client:v0.8.3
+    imagePullPolicy: IfNotPresent
+    defaults:
+      cassandra:
+        repository: docker.io/k8ssandra/cass-management-api
+        suffix: -ubi
+      dse:
+        repository: docker.io/datastax/dse-mgmtapi-6_8
+        suffix: -ubi
+---
+# Source: mission-control/charts/k8ssandra-operator/charts/cass-operator/templates/configmap.yaml
+kind: ConfigMap
+metadata:
+  name: mission-control-cass-operator-image-config
+  labels:     
+    app.kubernetes.io/name: cass-operator
+    helm.sh/chart: cass-operator-0.61.1
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: k8ssandra-mission-control-mission-control
+    k8ssandra.io/config: "image"
+apiVersion: v1
+data:
+  image_config.yaml: |
+    apiVersion: config.k8ssandra.io/v1beta2
+    kind: ImageConfig
+    metadata:
+      name: image-config
+    defaults:
+      pullPolicy: IfNotPresent
+      pullSecrets:
+      - 'mission-control-registry'
+      registry: docker.io
+    images:
+      config-builder:
+        name: cass-config-builder
+        repository: datastax
+        tag: 1.0-ubi
+      cql-router:
+        name: cql-router
+        registry: proxy.replicated.com
+        repository: proxy/mission-control/559669398656.dkr.ecr.us-west-2.amazonaws.com/mission-control
+        tag: ed96e7c4
+      cqlsh:
+        name: cqlsh-pod
+        registry: proxy.replicated.com
+        repository: proxy/mission-control/559669398656.dkr.ecr.us-west-2.amazonaws.com/mission-control
+        tag: d6dcf587
+      data-api:
+        name: data-api
+        repository: stargateio
+        tag: v1.0.32
+      k8ssandra-client:
+        name: k8ssandra-client
+        repository: k8ssandra
+        tag: v0.8.3
+      medusa:
+        name: medusa
+        repository: k8ssandra
+        tag: 0.25.1
+      reaper:
+        name: cassandra-reaper
+        repository: thelastpickle
+        tag: 4.0.0
+      system-logger:
+        name: system-logger
+        repository: k8ssandra
+        tag: v1.27.1
+    types:
+      cassandra:
+        name: cass-management-api
+        repository: k8ssandra
+        suffix: -ubi
+      dse:
+        name: dse-mgmtapi-6_8
+        repository: datastax
+        suffix: -ubi
+      hcd:
+        name: hcd
+        registry: proxy.replicated.com
+        repository: proxy/mission-control/559669398656.dkr.ecr.us-west-2.amazonaws.com/engops-shared/hcd/prod
+        suffix: -ubi
+---
+# Source: mission-control/charts/k8ssandra-operator/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mission-control-k8ssandra-operator-manager-config
+  labels:     
+    app.kubernetes.io/name: k8ssandra-operator
+    helm.sh/chart: k8ssandra-operator-1.27.0
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: k8ssandra-mission-control-mission-control
+data:
+  controller_manager_config.yaml: |
+    apiVersion: controller-runtime.sigs.k8s.io/v1alpha1
+    kind: ControllerManagerConfig
+    health:
+      healthProbeBindAddress: :8081
+    metrics:
+      bindAddress: 127.0.0.1:8080
+    webhook:
+      port: 9443
+    leaderElection:
+      leaderElect: true
+      resourceName: dcabfccc.k8ssandra.io
+---
+# Source: mission-control/templates/configmap.yaml
+kind: ConfigMap
+metadata:
+  name: mission-control-manager-config
+  labels:     
+    app.kubernetes.io/name: mission-control
+    helm.sh/chart: mission-control-1.15.0
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: k8ssandra-mission-control-mission-control
+apiVersion: v1
+data:
+  controller_manager_config.yaml: |
+    apiVersion: controller-runtime.sigs.k8s.io/v1alpha1
+    kind: ControllerManagerConfig
+    health:
+      healthProbeBindAddress: :8081
+    metrics:
+      bindAddress: 127.0.0.1:8080
+    webhook:
+      port: 9443
+    leaderElection:
+      leaderElect: true
+      resourceName: f5feed0c.datastax.com
+---
+# Source: mission-control/charts/dex/templates/rbac.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: mission-control-dex
+  labels:
+    helm.sh/chart: dex-0.23.0
+    app.kubernetes.io/name: dex
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/version: "2.42.0"
+    app.kubernetes.io/managed-by: Helm
+rules:
+  - apiGroups: ["apiextensions.k8s.io"]
+    resources: ["customresourcedefinitions"]
+    verbs: ["list", "create"]
+---
+# Source: mission-control/charts/k8ssandra-operator/charts/cass-operator/templates/role.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: mission-control-cass-operator
+  labels:     
+    app.kubernetes.io/name: cass-operator
+    helm.sh/chart: cass-operator-0.61.1
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: k8ssandra-mission-control-mission-control
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - persistentvolumes
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - storage.k8s.io
+    resources:
+      - storageclasses
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+      - endpoints
+      - endpoints/restricted
+      - events
+      - persistentvolumeclaims
+      - pods
+      - secrets
+      - services
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - namespaces
+    verbs:
+      - get
+  - apiGroups:
+      - apps
+    resources:
+      - statefulsets
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - cassandra.datastax.com
+    resources:
+      - cassandradatacenters
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - cassandra.datastax.com
+    resources:
+      - cassandradatacenters/finalizers
+    verbs:
+      - delete
+      - update
+  - apiGroups:
+      - cassandra.datastax.com
+    resources:
+      - cassandradatacenters/status
+    verbs:
+      - get
+      - patch
+      - update
+  - apiGroups:
+      - control.k8ssandra.io
+    resources:
+      - cassandratasks
+      - scheduledtasks
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - control.k8ssandra.io
+    resources:
+      - cassandratasks/finalizers
+      - scheduledtasks/finalizers
+    verbs:
+      - update
+  - apiGroups:
+      - control.k8ssandra.io
+    resources:
+      - cassandratasks/status
+      - scheduledtasks/status
+    verbs:
+      - get
+      - patch
+      - update
+  - apiGroups:
+      - discovery.k8s.io
+    resources:
+      - endpointslices
+      - endpointslices/restricted
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - policy
+    resources:
+      - poddisruptionbudgets
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+---
+# Source: mission-control/charts/k8ssandra-operator/templates/clusterrole.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: mission-control-k8ssandra-operator
+  labels:     
+    app.kubernetes.io/name: k8ssandra-operator
+    helm.sh/chart: k8ssandra-operator-1.27.0
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: k8ssandra-mission-control-mission-control
+rules:
+- apiGroups:
+    - ""
+  resources:
+    - configmaps
+    - endpoints
+    - endpoints/restricted
+    - secrets
+    - services
+  verbs:
+    - create
+    - delete
+    - get
+    - list
+    - patch
+    - update
+    - watch
+- apiGroups:
+    - ""
+  resources:
+    - events
+  verbs:
+    - create
+    - patch
+- apiGroups:
+    - ""
+  resources:
+    - pods
+  verbs:
+    - get
+    - list
+    - watch
+- apiGroups:
+    - apps
+  resources:
+    - deployments
+    - statefulsets
+  verbs:
+    - create
+    - delete
+    - get
+    - list
+    - patch
+    - update
+    - watch
+- apiGroups:
+    - batch
+  resources:
+    - cronjobs
+  verbs:
+    - create
+    - delete
+    - get
+    - list
+    - update
+    - watch
+- apiGroups:
+    - cassandra.datastax.com
+  resources:
+    - cassandradatacenters
+  verbs:
+    - create
+    - delete
+    - get
+    - list
+    - patch
+    - update
+    - watch
+- apiGroups:
+    - config.k8ssandra.io
+  resources:
+    - clientconfigs
+  verbs:
+    - create
+    - delete
+    - get
+    - list
+    - patch
+    - update
+    - watch
+- apiGroups:
+    - control.k8ssandra.io
+  resources:
+    - cassandratasks
+    - k8ssandratasks
+  verbs:
+    - create
+    - delete
+    - get
+    - list
+    - patch
+    - update
+    - watch
+- apiGroups:
+    - control.k8ssandra.io
+  resources:
+    - cassandratasks/status
+  verbs:
+    - get
+- apiGroups:
+    - control.k8ssandra.io
+  resources:
+    - k8ssandratasks/finalizers
+  verbs:
+    - update
+- apiGroups:
+    - control.k8ssandra.io
+  resources:
+    - k8ssandratasks/status
+  verbs:
+    - get
+    - patch
+    - update
+- apiGroups:
+    - discovery.k8s.io
+  resources:
+    - endpointslices
+    - endpointslices/restricted
+  verbs:
+    - create
+    - delete
+    - get
+    - list
+    - patch
+    - update
+    - watch
+- apiGroups:
+    - k8ssandra.io
+  resources:
+    - clientconfigs
+    - k8ssandraclusters
+  verbs:
+    - create
+    - delete
+    - get
+    - list
+    - patch
+    - update
+    - watch
+- apiGroups:
+    - k8ssandra.io
+  resources:
+    - k8ssandraclusters/finalizers
+  verbs:
+    - update
+- apiGroups:
+    - k8ssandra.io
+  resources:
+    - k8ssandraclusters/status
+  verbs:
+    - get
+    - patch
+    - update
+- apiGroups:
+    - medusa.k8ssandra.io
+  resources:
+    - cassandradatacenters
+  verbs:
+    - get
+    - list
+    - watch
+- apiGroups:
+    - medusa.k8ssandra.io
+  resources:
+    - medusabackupjobs
+    - medusabackups
+    - medusabackupschedules
+    - medusaconfigurations
+    - medusatasks
+  verbs:
+    - create
+    - delete
+    - get
+    - list
+    - patch
+    - update
+    - watch
+- apiGroups:
+    - medusa.k8ssandra.io
+  resources:
+    - medusabackupjobs/finalizers
+    - medusabackups/finalizers
+    - medusabackupschedules/finalizers
+    - medusaconfigurations/finalizers
+    - medusatasks/finalizers
+  verbs:
+    - update
+- apiGroups:
+    - medusa.k8ssandra.io
+  resources:
+    - medusabackupjobs/status
+    - medusabackups/status
+    - medusabackupschedules/status
+    - medusaconfigurations/status
+    - medusarestorejobs/status
+    - medusatasks/status
+  verbs:
+    - get
+    - patch
+    - update
+- apiGroups:
+    - medusa.k8ssandra.io
+  resources:
+    - medusarestorejobs
+  verbs:
+    - delete
+    - get
+    - list
+    - patch
+    - update
+    - watch
+- apiGroups:
+    - monitoring.coreos.com
+  resources:
+    - servicemonitors
+  verbs:
+    - create
+    - delete
+    - deletecollection
+    - get
+    - list
+    - patch
+    - update
+    - watch
+- apiGroups:
+    - reaper.k8ssandra.io
+  resources:
+    - reapers
+  verbs:
+    - create
+    - delete
+    - get
+    - list
+    - patch
+    - update
+    - watch
+- apiGroups:
+    - reaper.k8ssandra.io
+  resources:
+    - reapers/finalizers
+  verbs:
+    - update
+- apiGroups:
+    - reaper.k8ssandra.io
+  resources:
+    - reapers/status
+  verbs:
+    - get
+    - patch
+    - update
+- apiGroups:
+    - replication.k8ssandra.io
+  resources:
+    - replicatedsecrets
+  verbs:
+    - create
+    - delete
+    - get
+    - list
+    - update
+    - watch
+- apiGroups:
+    - replication.k8ssandra.io
+  resources:
+    - replicatedsecrets/finalizers
+  verbs:
+    - update
+- apiGroups:
+    - replication.k8ssandra.io
+  resources:
+    - replicatedsecrets/status
+  verbs:
+    - get
+    - patch
+    - update
+- apiGroups:
+    - stargate.k8ssandra.io
+  resources:
+    - stargates
+  verbs:
+    - create
+    - delete
+    - get
+    - list
+    - patch
+    - update
+    - watch
+- apiGroups:
+    - stargate.k8ssandra.io
+  resources:
+    - stargates/finalizers
+  verbs:
+    - update
+- apiGroups:
+    - stargate.k8ssandra.io
+  resources:
+    - stargates/status
+  verbs:
+    - get
+    - patch
+    - update
+---
+# Source: mission-control/charts/kube-state-metrics/templates/role.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:    
+    helm.sh/chart: kube-state-metrics-5.31.0
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: metrics
+    app.kubernetes.io/part-of: kube-state-metrics
+    app.kubernetes.io/name: kube-state-metrics
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/version: "2.15.0"
+  name: mission-control-kube-state-metrics
+rules:
+
+- apiGroups: ["certificates.k8s.io"]
+  resources:
+  - certificatesigningrequests
+  verbs: ["list", "watch"]
+
+- apiGroups: [""]
+  resources:
+  - configmaps
+  verbs: ["list", "watch"]
+
+- apiGroups: ["batch"]
+  resources:
+  - cronjobs
+  verbs: ["list", "watch"]
+
+- apiGroups: ["extensions", "apps"]
+  resources:
+  - daemonsets
+  verbs: ["list", "watch"]
+
+- apiGroups: ["extensions", "apps"]
+  resources:
+  - deployments
+  verbs: ["list", "watch"]
+
+- apiGroups: [""]
+  resources:
+  - endpoints
+  verbs: ["list", "watch"]
+
+- apiGroups: ["autoscaling"]
+  resources:
+  - horizontalpodautoscalers
+  verbs: ["list", "watch"]
+
+- apiGroups: ["extensions", "networking.k8s.io"]
+  resources:
+  - ingresses
+  verbs: ["list", "watch"]
+
+- apiGroups: ["batch"]
+  resources:
+  - jobs
+  verbs: ["list", "watch"]
+
+- apiGroups: ["coordination.k8s.io"]
+  resources:
+  - leases
+  verbs: ["list", "watch"]
+
+- apiGroups: [""]
+  resources:
+  - limitranges
+  verbs: ["list", "watch"]
+
+- apiGroups: ["admissionregistration.k8s.io"]
+  resources:
+    - mutatingwebhookconfigurations
+  verbs: ["list", "watch"]
+
+- apiGroups: [""]
+  resources:
+  - namespaces
+  verbs: ["list", "watch"]
+
+- apiGroups: ["networking.k8s.io"]
+  resources:
+  - networkpolicies
+  verbs: ["list", "watch"]
+
+- apiGroups: [""]
+  resources:
+  - nodes
+  verbs: ["list", "watch"]
+
+- apiGroups: [""]
+  resources:
+  - persistentvolumeclaims
+  verbs: ["list", "watch"]
+
+- apiGroups: [""]
+  resources:
+  - persistentvolumes
+  verbs: ["list", "watch"]
+
+- apiGroups: ["policy"]
+  resources:
+    - poddisruptionbudgets
+  verbs: ["list", "watch"]
+
+- apiGroups: [""]
+  resources:
+  - pods
+  verbs: ["list", "watch"]
+
+- apiGroups: ["extensions", "apps"]
+  resources:
+  - replicasets
+  verbs: ["list", "watch"]
+
+- apiGroups: [""]
+  resources:
+  - replicationcontrollers
+  verbs: ["list", "watch"]
+
+- apiGroups: [""]
+  resources:
+  - resourcequotas
+  verbs: ["list", "watch"]
+
+- apiGroups: [""]
+  resources:
+  - secrets
+  verbs: ["list", "watch"]
+
+- apiGroups: [""]
+  resources:
+  - services
+  verbs: ["list", "watch"]
+
+- apiGroups: ["apps"]
+  resources:
+  - statefulsets
+  verbs: ["list", "watch"]
+
+- apiGroups: ["storage.k8s.io"]
+  resources:
+    - storageclasses
+  verbs: ["list", "watch"]
+
+- apiGroups: ["admissionregistration.k8s.io"]
+  resources:
+    - validatingwebhookconfigurations
+  verbs: ["list", "watch"]
+
+- apiGroups: ["storage.k8s.io"]
+  resources:
+    - volumeattachments
+  verbs: ["list", "watch"]
+---
+# Source: mission-control/templates/cass-dc-watcher-clusterrole.yaml
+# cass-dc-watcher-role is used by cql-router pods to watch for changes to CassandraDatacenter resources.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: cass-dc-watcher-role
+  labels:     
+    app.kubernetes.io/name: mission-control
+    helm.sh/chart: mission-control-1.15.0
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: k8ssandra-mission-control-mission-control
+rules:
+  - apiGroups:
+      - cassandra.datastax.com
+    resources:
+      - cassandradatacenters
+    verbs:
+      - get
+      - watch
+---
+# Source: mission-control/templates/clusterrole.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: mission-control-manager-role
+  labels:     
+    app.kubernetes.io/name: mission-control
+    helm.sh/chart: mission-control-1.15.0
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: k8ssandra-mission-control-mission-control
+rules:
+# Do not add the "end" template instruction here, it will be added by the prepare-helm-release.sh script
+- apiGroups:
+    - ""
+  resources:
+    - configmaps
+    - endpoints
+    - endpoints/restricted
+    - namespaces
+    - secrets
+    - secrets/finalizer
+    - serviceaccounts
+    - services
+  verbs:
+    - create
+    - delete
+    - get
+    - list
+    - patch
+    - update
+    - watch
+- apiGroups:
+    - ""
+  resources:
+    - events
+  verbs:
+    - create
+    - patch
+- apiGroups:
+    - ""
+  resources:
+    - nodes
+    - pods
+  verbs:
+    - get
+    - list
+    - watch
+- apiGroups:
+    - apps
+  resources:
+    - deployments
+  verbs:
+    - create
+    - delete
+    - get
+    - list
+    - patch
+    - update
+    - watch
+- apiGroups:
+    - batch
+  resources:
+    - cronjobs
+  verbs:
+    - create
+    - delete
+    - get
+    - list
+    - patch
+    - update
+    - watch
+- apiGroups:
+    - cassandra.datastax.com
+  resources:
+    - cassandradatacenters
+  verbs:
+    - create
+    - delete
+    - get
+    - list
+    - patch
+    - update
+    - watch
+- apiGroups:
+    - cert-manager.io
+  resources:
+    - certificates
+    - clusterissuers
+    - issuers
+  verbs:
+    - create
+    - delete
+    - get
+    - list
+    - patch
+    - update
+    - watch
+- apiGroups:
+    - config.k8ssandra.io
+  resources:
+    - clientconfigs
+  verbs:
+    - get
+    - list
+    - patch
+    - update
+    - watch
+- apiGroups:
+    - control.k8ssandra.io
+  resources:
+    - cassandratasks
+  verbs:
+    - create
+    - delete
+    - get
+    - list
+    - patch
+    - update
+    - watch
+- apiGroups:
+    - control.k8ssandra.io
+  resources:
+    - k8ssandratasks
+  verbs:
+    - create
+    - list
+- apiGroups:
+    - discovery.k8s.io
+  resources:
+    - endpointslices
+    - endpointslices/restricted
+  verbs:
+    - create
+    - delete
+    - get
+    - list
+    - patch
+    - update
+    - watch
+- apiGroups:
+    - k8ssandra.io
+  resources:
+    - k8ssandraclusters
+  verbs:
+    - create
+    - delete
+    - get
+    - list
+    - patch
+    - update
+    - watch
+- apiGroups:
+    - k8ssandra.io
+  resources:
+    - k8ssandraclusters/finalizers
+  verbs:
+    - update
+- apiGroups:
+    - k8ssandra.io
+  resources:
+    - k8ssandraclusters/status
+  verbs:
+    - get
+    - patch
+    - update
+- apiGroups:
+    - medusa.k8ssandra.io
+  resources:
+    - medusabackupjobs
+  verbs:
+    - create
+    - get
+    - list
+- apiGroups:
+    - medusa.k8ssandra.io
+  resources:
+    - medusabackups
+  verbs:
+    - get
+    - list
+- apiGroups:
+    - medusa.k8ssandra.io
+  resources:
+    - medusabackupschedules
+    - medusaconfigurations
+    - medusarestorejobs
+    - medusatasks
+  verbs:
+    - create
+    - delete
+    - get
+    - list
+    - patch
+- apiGroups:
+    - missioncontrol.datastax.com
+  resources:
+    - cqlconnectivities
+    - dataapis
+    - missioncontrolclusters
+  verbs:
+    - create
+    - delete
+    - get
+    - list
+    - patch
+    - update
+    - watch
+- apiGroups:
+    - missioncontrol.datastax.com
+  resources:
+    - cqlconnectivities/finalizers
+    - dataapis/finalizers
+    - missioncontrolclusters/finalizers
+  verbs:
+    - update
+- apiGroups:
+    - missioncontrol.datastax.com
+  resources:
+    - cqlconnectivities/status
+    - dataapis/status
+    - missioncontrolclusters/status
+  verbs:
+    - get
+    - patch
+    - update
+- apiGroups:
+    - monitoring.coreos.com
+  resources:
+    - servicemonitors
+  verbs:
+    - create
+    - delete
+    - deletecollection
+    - get
+    - list
+    - patch
+    - update
+    - watch
+- apiGroups:
+    - networking.k8s.io
+  resources:
+    - ingresses
+  verbs:
+    - create
+    - get
+    - list
+    - patch
+    - update
+- apiGroups:
+    - networking.k8s.io
+  resources:
+    - networkpolicies
+  verbs:
+    - create
+    - delete
+    - get
+    - list
+    - patch
+    - update
+    - watch
+- apiGroups:
+    - rbac.authorization.k8s.io
+  resources:
+    - clusterrolebindings
+    - roles
+  verbs:
+    - create
+    - get
+    - list
+    - watch
+- apiGroups:
+    - reaper.k8ssandra.io
+  resources:
+    - reapers
+  verbs:
+    - create
+    - delete
+    - get
+    - list
+    - patch
+    - update
+    - watch
+- apiGroups:
+    - replication.k8ssandra.io
+  resources:
+    - replicatedsecrets
+  verbs:
+    - create
+    - delete
+    - get
+    - list
+    - patch
+    - update
+    - watch
+- apiGroups:
+    - security.openshift.io
+  resourceNames:
+    - anyuid
+  resources:
+    - securitycontextconstraints
+  verbs:
+    - use
+- apiGroups:
+    - stargate.k8ssandra.io
+  resources:
+    - stargates
+  verbs:
+    - create
+    - delete
+    - get
+    - list
+    - patch
+    - update
+    - watch
+- apiGroups:
+    - storage.k8s.io
+  resources:
+    - storageclasses
+  verbs:
+    - get
+    - list
+---
+# Source: mission-control/charts/dex/templates/rbac.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: mission-control-dex-cluster
+  labels:
+    helm.sh/chart: dex-0.23.0
+    app.kubernetes.io/name: dex
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/version: "2.42.0"
+    app.kubernetes.io/managed-by: Helm
+roleRef:
+  kind: ClusterRole
+  apiGroup: rbac.authorization.k8s.io
+  name: mission-control-dex
+subjects:
+- kind: ServiceAccount
+  namespace: mission-control
+  name: mission-control-dex
+---
+# Source: mission-control/charts/k8ssandra-operator/charts/cass-operator/templates/rolebinding.yaml
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: mission-control-cass-operator
+  labels:     
+    app.kubernetes.io/name: cass-operator
+    helm.sh/chart: cass-operator-0.61.1
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: k8ssandra-mission-control-mission-control
+subjects:
+  - kind: ServiceAccount
+    name: mission-control-cass-operator
+    namespace: mission-control
+roleRef:
+  kind: ClusterRole
+  name: mission-control-cass-operator
+  apiGroup: rbac.authorization.k8s.io
+---
+# Source: mission-control/charts/k8ssandra-operator/templates/clusterrolebinding.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: mission-control-k8ssandra-operator
+  labels:     
+    app.kubernetes.io/name: k8ssandra-operator
+    helm.sh/chart: k8ssandra-operator-1.27.0
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: k8ssandra-mission-control-mission-control
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: mission-control-k8ssandra-operator
+subjects:
+  - kind: ServiceAccount
+    name: mission-control-k8ssandra-operator
+    namespace: mission-control
+---
+# Source: mission-control/charts/kube-state-metrics/templates/clusterrolebinding.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  labels:    
+    helm.sh/chart: kube-state-metrics-5.31.0
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: metrics
+    app.kubernetes.io/part-of: kube-state-metrics
+    app.kubernetes.io/name: kube-state-metrics
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/version: "2.15.0"
+  name: mission-control-kube-state-metrics
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: mission-control-kube-state-metrics
+subjects:
+- kind: ServiceAccount
+  name: mission-control-kube-state-metrics
+  namespace: mission-control
+---
+# Source: mission-control/templates/clusterrolebinding.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: mission-control-manager-rolebinding
+  labels:     
+    app.kubernetes.io/name: mission-control
+    helm.sh/chart: mission-control-1.15.0
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: k8ssandra-mission-control-mission-control
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: mission-control-manager-role
+subjects:
+- kind: ServiceAccount
+  name: mission-control
+  namespace: mission-control
+---
+# Source: mission-control/charts/dex/templates/rbac.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: mission-control-dex
+  namespace: mission-control
+  labels:
+    helm.sh/chart: dex-0.23.0
+    app.kubernetes.io/name: dex
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/version: "2.42.0"
+    app.kubernetes.io/managed-by: Helm
+rules:
+  - apiGroups: ["dex.coreos.com"]
+    resources: ["*"]
+    verbs: ["*"]
+---
+# Source: mission-control/charts/k8ssandra-operator/charts/cass-operator/templates/leader_election_role.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: mission-control-cass-operator-leader
+  labels:     
+    app.kubernetes.io/name: cass-operator
+    helm.sh/chart: cass-operator-0.61.1
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: k8ssandra-mission-control-mission-control
+rules:
+  - apiGroups:
+      - ""
+      - coordination.k8s.io
+    resources:
+      - configmaps
+      - leases
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+      - update
+      - patch
+      - delete
+  - apiGroups:
+      - ""
+    resources:
+      - events
+    verbs:
+      - create
+      - patch
+---
+# Source: mission-control/charts/k8ssandra-operator/templates/leader-role.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: mission-control-k8ssandra-operator-leader-election-role
+  labels:     
+    app.kubernetes.io/name: k8ssandra-operator
+    helm.sh/chart: k8ssandra-operator-1.27.0
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: k8ssandra-mission-control-mission-control
+rules:
+- apiGroups:
+    - ""
+  resources:
+    - configmaps
+  verbs:
+    - get
+    - list
+    - watch
+    - create
+    - update
+    - patch
+    - delete
+- apiGroups:
+    - coordination.k8s.io
+  resources:
+    - leases
+  verbs:
+    - get
+    - list
+    - watch
+    - create
+    - update
+    - patch
+    - delete
+- apiGroups:
+    - ""
+  resources:
+    - events
+  verbs:
+    - create
+    - patch
+---
+# Source: mission-control/charts/replicated/templates/replicated-role.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  labels:
+    helm.sh/chart: replicated-1.0.0
+    app.kubernetes.io/name: replicated
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/version: "1.0.0"
+    app.kubernetes.io/managed-by: Helm
+  name: replicated-role
+  namespace: "mission-control"
+rules:
+- apiGroups:
+  - '*'
+  resources:
+  - '*'
+  verbs:
+  - 'get'
+  - 'list'
+  - 'watch'
+- apiGroups:
+  - ''
+  resources:
+  - 'secrets'
+  verbs:
+  - 'create'
+- apiGroups:
+  - ''
+  resources:
+  - 'secrets'
+  verbs:
+  - 'update'
+  resourceNames:
+  - replicated
+  - replicated-instance-report
+  - replicated-custom-app-metrics-report
+  - replicated-meta-data
+---
+# Source: mission-control/templates/leader_election_role.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: mission-control-leader-election-role
+  labels:     
+    app.kubernetes.io/name: mission-control
+    helm.sh/chart: mission-control-1.15.0
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: k8ssandra-mission-control-mission-control
+rules:
+- apiGroups:
+    - ""
+  resources:
+    - configmaps
+  verbs:
+    - get
+    - list
+    - watch
+    - create
+    - update
+    - patch
+    - delete
+- apiGroups:
+    - coordination.k8s.io
+  resources:
+    - leases
+  verbs:
+    - get
+    - list
+    - watch
+    - create
+    - update
+    - patch
+    - delete
+- apiGroups:
+    - ""
+  resources:
+    - events
+  verbs:
+    - create
+    - patch
+---
+# Source: mission-control/charts/dex/templates/rbac.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: mission-control-dex
+  namespace: mission-control
+  labels:
+    helm.sh/chart: dex-0.23.0
+    app.kubernetes.io/name: dex
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/version: "2.42.0"
+    app.kubernetes.io/managed-by: Helm
+roleRef:
+  kind: Role
+  apiGroup: rbac.authorization.k8s.io
+  name: mission-control-dex
+subjects:
+- kind: ServiceAccount
+  namespace: mission-control
+  name: mission-control-dex
+---
+# Source: mission-control/charts/k8ssandra-operator/charts/cass-operator/templates/leader_election_role_binding.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: mission-control-cass-operator-leader
+  labels:     
+    app.kubernetes.io/name: cass-operator
+    helm.sh/chart: cass-operator-0.61.1
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: k8ssandra-mission-control-mission-control
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: mission-control-cass-operator-leader
+subjects:
+  - kind: ServiceAccount
+    name: mission-control-cass-operator
+---
+# Source: mission-control/charts/k8ssandra-operator/templates/leader-rolebinding.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: mission-control-k8ssandra-operator-leader-election-rolebinding
+  labels:     
+    app.kubernetes.io/name: k8ssandra-operator
+    helm.sh/chart: k8ssandra-operator-1.27.0
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: k8ssandra-mission-control-mission-control
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: mission-control-k8ssandra-operator-leader-election-role
+subjects:
+- kind: ServiceAccount
+  name: mission-control-k8ssandra-operator
+---
+# Source: mission-control/charts/replicated/templates/replicated-rolebinding.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  labels:
+    helm.sh/chart: replicated-1.0.0
+    app.kubernetes.io/name: replicated
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/version: "1.0.0"
+    app.kubernetes.io/managed-by: Helm
+  name: replicated-rolebinding
+  namespace: "mission-control"
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: replicated-role
+subjects:
+- kind: ServiceAccount
+  name: replicated
+  namespace: "mission-control"
+---
+# Source: mission-control/templates/leader_election_role_binding.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: mission-control-leader-election-rolebinding
+  labels:     
+    app.kubernetes.io/name: mission-control
+    helm.sh/chart: mission-control-1.15.0
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: k8ssandra-mission-control-mission-control
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: mission-control-leader-election-role
+subjects:
+- kind: ServiceAccount
+  name: mission-control
+  namespace: mission-control
+---
+# Source: mission-control/charts/aggregator/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: mission-control-aggregator
+  namespace: "mission-control"
+  labels:
+    helm.sh/chart: aggregator-0.41.7
+    app.kubernetes.io/name: aggregator
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/component: Aggregator
+    app.kubernetes.io/version: "0.49.0-distroless-libc"
+    app.kubernetes.io/managed-by: Helm
+    
+  annotations:
+spec:
+  ports:
+    - name: vector
+      nodePort: 30600
+      port: 6000
+      protocol: TCP
+      targetPort: 6000
+  selector:
+    app.kubernetes.io/name: aggregator
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/component: Aggregator
+  type: NodePort
+---
+# Source: mission-control/charts/dex/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: mission-control-dex
+  namespace: mission-control
+  labels:
+    helm.sh/chart: dex-0.23.0
+    app.kubernetes.io/name: dex
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/version: "2.42.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 5556
+      targetPort: http
+      protocol: TCP
+      appProtocol: http
+    - name: telemetry
+      port: 5558
+      targetPort: telemetry
+      protocol: TCP
+      appProtocol: http
+  selector:
+    app.kubernetes.io/name: dex
+    app.kubernetes.io/instance: mission-control
+---
+# Source: mission-control/charts/k8ssandra-operator/charts/cass-operator/templates/webhook-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: mission-control-cass-operator-webhook-service
+  labels:     
+    app.kubernetes.io/name: cass-operator
+    helm.sh/chart: cass-operator-0.61.1
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: k8ssandra-mission-control-mission-control
+spec:
+  ports:
+    - port: 443
+      targetPort: 9443
+  selector:
+    control-plane: mission-control-cass-operator-controller-manager
+---
+# Source: mission-control/charts/k8ssandra-operator/templates/webhook-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: mission-control-k8ssandra-operator-webhook-service
+  labels:     
+    app.kubernetes.io/name: k8ssandra-operator
+    helm.sh/chart: k8ssandra-operator-1.27.0
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: k8ssandra-mission-control-mission-control
+spec:
+  ports:
+    - port: 443
+      protocol: TCP
+      targetPort: 9443
+  selector:
+    control-plane: k8ssandra-operator
+---
+# Source: mission-control/charts/kube-state-metrics/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: mission-control-kube-state-metrics
+  namespace: mission-control
+  labels:    
+    helm.sh/chart: kube-state-metrics-5.31.0
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: metrics
+    app.kubernetes.io/part-of: kube-state-metrics
+    app.kubernetes.io/name: kube-state-metrics
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/version: "2.15.0"
+  annotations:
+    prometheus.io/scrape: 'true'
+spec:
+  type: "ClusterIP"
+  ports:
+  - name: "http"
+    protocol: TCP
+    port: 8080
+    targetPort: 8080
+  
+  selector:    
+    app.kubernetes.io/name: kube-state-metrics
+    app.kubernetes.io/instance: mission-control
+---
+# Source: mission-control/charts/replicated/templates/replicated-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    helm.sh/chart: replicated-1.0.0
+    app.kubernetes.io/name: replicated
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/version: "1.0.0"
+    app.kubernetes.io/managed-by: Helm
+  name: replicated
+  namespace: "mission-control"
+spec:
+  ports:
+  - name: http
+    port: 3000
+    targetPort: 3000
+  selector:
+    app.kubernetes.io/name: replicated
+    app.kubernetes.io/instance: mission-control
+  type: ClusterIP
+---
+# Source: mission-control/templates/cass-operator-metrics-service.yaml
+# This isn't part of normal cass-operator deployment, only for mission-control
+apiVersion: v1
+kind: Service
+metadata:
+  name: mission-control-cass-operator-metrics
+  labels:     
+    app.kubernetes.io/name: mission-control
+    helm.sh/chart: mission-control-1.15.0
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: k8ssandra-mission-control-mission-control
+spec:
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+  selector:
+    control-plane: mission-control-cass-operator-controller-manager
+    app.kubernetes.io/name: cass-operator
+---
+# Source: mission-control/templates/ui-nodeport-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: mission-control-ui
+  labels:     
+    app.kubernetes.io/name: mission-control
+    helm.sh/chart: mission-control-1.15.0
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: k8ssandra-mission-control-mission-control
+spec:
+  selector:
+    app: mission-control-ui
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+      nodePort: 30880
+  type: NodePort
+---
+# Source: mission-control/templates/webhook-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: mission-control-webhook-service
+  labels:     
+    app.kubernetes.io/name: mission-control
+    helm.sh/chart: mission-control-1.15.0
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: k8ssandra-mission-control-mission-control
+spec:
+  ports:
+    - port: 443
+      protocol: TCP
+      targetPort: 9443
+  selector:
+    control-plane: mission-control-controller-manager
+---
+# Source: mission-control/charts/dex/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mission-control-dex
+  namespace: mission-control
+  labels:
+    helm.sh/chart: dex-0.23.0
+    app.kubernetes.io/name: dex
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/version: "2.42.0"
+    app.kubernetes.io/managed-by: Helm
+    
+  
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: dex
+      app.kubernetes.io/instance: mission-control
+  template:
+    metadata:
+      annotations:
+      
+      labels:
+        app.kubernetes.io/name: dex
+        app.kubernetes.io/instance: mission-control
+    spec:
+      serviceAccountName: mission-control-dex
+      securityContext:
+        runAsNonRoot: true
+      containers:
+        - name: dex
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: true
+            seccompProfile:
+              type: RuntimeDefault
+          image: "docker.io/datastax/mission-control-dex:v1.15.0"
+          imagePullPolicy: IfNotPresent
+          args:
+            - dex
+            - serve
+            - --web-http-addr
+            - 0.0.0.0:5556
+            - --telemetry-addr
+            - 0.0.0.0:5558
+            - /etc/dex/config.yaml
+          env:
+          ports:
+            - name: http
+              containerPort: 5556
+              protocol: TCP
+            - name: telemetry
+              containerPort: 5558
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /healthz/live
+              port: telemetry
+          readinessProbe:
+            httpGet:
+              path: /healthz/ready
+              port: telemetry
+          resources:
+            {}
+          volumeMounts:
+            - name: config
+              mountPath: /etc/dex
+              readOnly: true
+            - mountPath: /tmp
+              name: tmp-dir
+              readOnly: false
+      volumes:
+        - name: config
+          secret:
+            secretName: mission-control-ui-dex-config
+        - emptyDir: {}
+          name: tmp-dir
+---
+# Source: mission-control/charts/k8ssandra-operator/charts/cass-operator/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mission-control-cass-operator
+  labels:     
+    app.kubernetes.io/name: cass-operator
+    helm.sh/chart: cass-operator-0.61.1
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: k8ssandra-mission-control-mission-control
+    control-plane: mission-control-cass-operator-controller-manager
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: cass-operator
+      app.kubernetes.io/instance: mission-control
+      app.kubernetes.io/part-of: k8ssandra-mission-control-mission-control
+  template:
+    metadata:
+      labels:         
+        app.kubernetes.io/name: cass-operator
+        helm.sh/chart: cass-operator-0.61.1
+        app.kubernetes.io/instance: mission-control
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/part-of: k8ssandra-mission-control-mission-control
+        control-plane: mission-control-cass-operator-controller-manager
+    spec:
+      serviceAccountName: mission-control-cass-operator
+      securityContext:
+        runAsNonRoot: true
+      containers:
+        - name: cass-operator
+          args:
+          - --config=/configs/controller_manager_config.yaml
+          command:
+          - /manager
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: true
+            runAsGroup: 65534
+            runAsNonRoot: true
+            runAsUser: 65534
+            seccompProfile:
+              type: RuntimeDefault
+          image: docker.io/k8ssandra/cass-operator:v1.27.1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 9443
+              name: webhook-server
+              protocol: TCP
+            - containerPort: 8080
+              name: metrics
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /tmp/k8s-webhook-server/serving-certs
+              name: cass-operator-certs-volume
+              readOnly: true
+            - mountPath: /configs
+              name: manager-config
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8081
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: 8081
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+            {}
+          env:
+            - name: WATCH_NAMESPACE
+              value: ""
+      volumes:
+        - name: cass-operator-certs-volume
+          secret:
+            defaultMode: 420
+            secretName: mission-control-cass-operator-webhook-server-cert
+        - configMap:
+            name: mission-control-cass-operator-manager-config
+          name: manager-config
+---
+# Source: mission-control/charts/k8ssandra-operator/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mission-control-k8ssandra-operator
+  labels:     
+    app.kubernetes.io/name: k8ssandra-operator
+    helm.sh/chart: k8ssandra-operator-1.27.0
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: k8ssandra-mission-control-mission-control
+    control-plane: k8ssandra-operator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: k8ssandra-operator
+      app.kubernetes.io/instance: mission-control
+      app.kubernetes.io/part-of: k8ssandra-mission-control-mission-control
+      control-plane: k8ssandra-operator
+  template:
+    metadata:
+      labels:        
+        app.kubernetes.io/name: k8ssandra-operator
+        helm.sh/chart: k8ssandra-operator-1.27.0
+        app.kubernetes.io/instance: mission-control
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/part-of: k8ssandra-mission-control-mission-control
+        control-plane: k8ssandra-operator
+    spec:
+      serviceAccountName: mission-control-k8ssandra-operator
+      securityContext:
+        runAsNonRoot: true
+      containers:
+      - command:
+        - /manager
+        # args:
+        # - --config=controller_manager_config.yaml
+        env:
+        - name: WATCH_NAMESPACE
+          value: ""
+        - name: K8SSANDRA_CONTROL_PLANE
+          value: "true"
+        - name: SERVICE_ACCOUNT_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.serviceAccountName
+        - name: OPERATOR_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        image: cr.k8ssandra.io/k8ssandra/k8ssandra-operator:v1.27.0
+        imagePullPolicy: IfNotPresent
+        securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: true
+            runAsGroup: 65534
+            runAsNonRoot: true
+            runAsUser: 65534
+            seccompProfile:
+              type: RuntimeDefault
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8081
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        name: k8ssandra-operator
+        ports:
+          - containerPort: 9443
+            name: webhook-server
+            protocol: TCP
+        readinessProbe:
+          httpGet:
+            path: /readyz
+            port: 8081
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        resources:
+            {}
+        volumeMounts:
+        - mountPath: /controller_manager_config.yaml
+          name: manager-config
+          subPath: controller_manager_config.yaml
+        - mountPath: /tmp/k8s-webhook-server/serving-certs
+          name: cert
+          readOnly: true
+      terminationGracePeriodSeconds: 10
+      volumes:
+      - configMap:
+          name: mission-control-k8ssandra-operator-manager-config
+        name: manager-config
+      - name: cert
+        secret:
+          defaultMode: 420
+          secretName: mission-control-k8ssandra-operator-webhook-server-cert
+---
+# Source: mission-control/charts/kube-state-metrics/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mission-control-kube-state-metrics
+  namespace: mission-control
+  labels:    
+    helm.sh/chart: kube-state-metrics-5.31.0
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: metrics
+    app.kubernetes.io/part-of: kube-state-metrics
+    app.kubernetes.io/name: kube-state-metrics
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/version: "2.15.0"
+spec:
+  selector:
+    matchLabels:      
+      app.kubernetes.io/name: kube-state-metrics
+      app.kubernetes.io/instance: mission-control
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  revisionHistoryLimit: 10
+  template:
+    metadata:
+      labels:        
+        helm.sh/chart: kube-state-metrics-5.31.0
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/component: metrics
+        app.kubernetes.io/part-of: kube-state-metrics
+        app.kubernetes.io/name: kube-state-metrics
+        app.kubernetes.io/instance: mission-control
+        app.kubernetes.io/version: "2.15.0"
+    spec:
+      automountServiceAccountToken: true
+      hostNetwork: false
+      serviceAccountName: mission-control-kube-state-metrics
+      securityContext:
+        fsGroup: 65534
+        runAsGroup: 65534
+        runAsNonRoot: true
+        runAsUser: 65534
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+      - name: kube-state-metrics
+        args:
+        - --port=8080
+        - --resources=certificatesigningrequests,configmaps,cronjobs,daemonsets,deployments,endpoints,horizontalpodautoscalers,ingresses,jobs,leases,limitranges,mutatingwebhookconfigurations,namespaces,networkpolicies,nodes,persistentvolumeclaims,persistentvolumes,poddisruptionbudgets,pods,replicasets,replicationcontrollers,resourcequotas,secrets,services,statefulsets,storageclasses,validatingwebhookconfigurations,volumeattachments
+        imagePullPolicy: IfNotPresent
+        image: registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.15.0
+        ports:
+        - containerPort: 8080
+          name: "http"
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            httpHeaders:
+            path: /livez
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            httpHeaders:
+            path: /readyz
+            port: 8081
+            scheme: HTTP
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        resources:
+          {}
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+---
+# Source: mission-control/charts/replicated/templates/replicated-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    helm.sh/chart: replicated-1.0.0
+    app.kubernetes.io/name: replicated
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/version: "1.0.0"
+    app.kubernetes.io/managed-by: Helm
+  name: replicated
+  namespace: "mission-control"
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: replicated
+      app.kubernetes.io/instance: mission-control
+  template:
+    metadata:
+      annotations:
+        checksum/replicated-secret: 7f06ba177d1418fb253f1f8dd0c403478310cc3472aeb3f7a06e9331ab76203e
+      labels:
+        helm.sh/chart: replicated-1.0.0
+        app.kubernetes.io/name: replicated
+        app.kubernetes.io/instance: mission-control
+        app.kubernetes.io/version: "1.0.0"
+        app.kubernetes.io/managed-by: Helm
+    spec:
+      securityContext:
+        fsGroup: 1001
+        runAsGroup: 1001
+        runAsUser: 1001
+        seccompProfile:
+          type: RuntimeDefault
+        supplementalGroups:
+        - 1001
+      volumes:
+      - name: replicated
+        secret:
+          secretName: replicated
+      containers:
+      - name: replicated
+        image: docker.io/replicated/replicated-sdk:1.0.0
+        imagePullPolicy: IfNotPresent
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+        volumeMounts:
+        - name: replicated
+          mountPath: /etc/replicated/config.yaml
+          readOnly: true
+          subPath: config.yaml
+        env:
+        - name: REPLICATED_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: REPLICATED_POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: DISABLE_OUTBOUND_CONNECTIONS
+          value: "false"
+        - name: IS_HELM_MANAGED
+          value: "true"
+        - name: HELM_RELEASE_NAME
+          value: mission-control
+        - name: HELM_RELEASE_NAMESPACE
+          value: mission-control
+        - name: HELM_PARENT_CHART_URL
+          value: "oci://registry.replicated.com/mission-control/stable/mission-control"
+        - name: HELM_DRIVER
+          value: secret # TODO: support other drivers
+        - name: REPLICATED_SECRET_NAME
+          value: replicated
+        - name: REPLICATED_DEPLOYMENT_NAME
+          value: replicated
+        - name: REPLICATED_CONFIG_FILE
+          value: /etc/replicated/config.yaml
+        ports:
+        - containerPort: 3000
+          name: http
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /healthz
+            port: 3000
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        resources:
+          limits:
+            cpu: 500m
+            memory: 500Mi
+          requests:
+            cpu: 100m
+            memory: 100Mi
+      restartPolicy: Always
+      serviceAccountName: replicated
+---
+# Source: mission-control/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mission-control-operator
+  labels:     
+    app.kubernetes.io/name: mission-control
+    helm.sh/chart: mission-control-1.15.0
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: k8ssandra-mission-control-mission-control
+    control-plane: mission-control-controller-manager
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: mission-control
+      app.kubernetes.io/instance: mission-control
+      app.kubernetes.io/part-of: k8ssandra-mission-control-mission-control
+  template:
+    metadata:
+      labels:        
+        app.kubernetes.io/name: mission-control
+        helm.sh/chart: mission-control-1.15.0
+        app.kubernetes.io/instance: mission-control
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/part-of: k8ssandra-mission-control-mission-control
+        control-plane: mission-control-controller-manager
+    spec:
+      serviceAccountName: mission-control
+      securityContext:
+        runAsNonRoot: true
+      containers:
+        - name: mission-control
+          # args:
+          # - --config=/configs/controller_manager_config.yaml
+          args:
+            - --default-service-account=mission-control
+          command:
+          - /manager
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: true
+            runAsGroup: 65534
+            runAsNonRoot: true
+            runAsUser: 65534
+            seccompProfile:
+              type: RuntimeDefault
+          image: docker.io/datastax/mission-control:v1.15.0
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - mountPath: /configs
+              name: manager-config
+            - mountPath: /tmp/k8s-webhook-server/serving-certs
+              name: cert
+              readOnly: true
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8081
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: 8081
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+            {}
+          env:
+            - name: OPENSHIFT
+              value: "false"
+            - name: ALLOW_OPERATORS_ON_DATABASE_NODES
+              value: "true"
+            - name: IMAGE_TAG
+              value: "v1.15.0"
+            - name: WATCH_NAMESPACE
+              value: ""
+            - name: MC_CONTROL_PLANE
+              value: "true"
+            - name: IMAGE_PULL_SECRET
+              value: mission-control-registry
+            - name: INGRESS_HTTPS_PORT
+              value: "8443"
+            - name: CHART_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.labels['app.kubernetes.io/name']
+      volumes:
+        - configMap:
+            name: mission-control-manager-config
+          name: manager-config
+        - name: cert
+          secret:
+            defaultMode: 420
+            secretName: mission-control-webhook-server-cert
+---
+# Source: mission-control/templates/ui-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mission-control-ui
+  labels:     
+    app.kubernetes.io/name: mission-control
+    helm.sh/chart: mission-control-1.15.0
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: k8ssandra-mission-control-mission-control
+    app: mission-control-ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mission-control-ui
+  template:
+    metadata:
+      name: mission-control-ui
+      labels:
+        app: mission-control-ui
+    spec:
+      serviceAccountName: mission-control
+      securityContext:
+        runAsNonRoot: true
+      containers:
+        - name: mission-control-ui
+          image: docker.io/datastax/mission-control-ui:v1.15.0
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: true
+            seccompProfile:
+              type: RuntimeDefault
+          resources:
+            {}
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          args:
+            - '/mission-control-restapi'
+            - '-release-version=1.15.0'
+            - '-base-url='
+            - '-cert-file=/tmp/certs/tls.crt'
+            - '-key-file=/tmp/certs/tls.key'
+            - '-ingress-https-port=8443'
+          env:
+            - name: GIN_MODE
+              value: release
+            - name: NEXT_PUBLIC_MISSION_CONTROL_UI_MODE
+              value: standard
+          livenessProbe:
+            httpGet:
+              path: /liveness
+              port: 8080
+              scheme: HTTPS
+            initialDelaySeconds: 3
+            periodSeconds: 3
+          volumeMounts:
+            - mountPath: /tmp/certs
+              name: cert
+              readOnly: true
+      volumes:
+        - name: cert
+          secret:
+            defaultMode: 420
+            secretName: mission-control-ui-cert
+      restartPolicy: Always
+---
+# Source: mission-control/charts/aggregator/templates/statefulset.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mission-control-aggregator
+  namespace: "mission-control"
+  labels:
+    helm.sh/chart: aggregator-0.41.7
+    app.kubernetes.io/name: aggregator
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/component: Aggregator
+    app.kubernetes.io/version: "0.49.0-distroless-libc"
+    app.kubernetes.io/managed-by: Helm
+    
+  annotations:
+    {}
+spec:
+  replicas: 1
+  podManagementPolicy: OrderedReady
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: aggregator
+      app.kubernetes.io/instance: mission-control
+      app.kubernetes.io/component: Aggregator
+  minReadySeconds: 0
+  serviceName: mission-control-aggregator-headless
+  template:
+    metadata:
+      annotations:
+        checksum/config: c04df1ed0d780466fe0b122b2aabcf41ab46ba5599eaac2dafd9c8e3a6fd4f00
+      labels:
+        app.kubernetes.io/name: aggregator
+        app.kubernetes.io/instance: mission-control
+        app.kubernetes.io/component: Aggregator
+        vector.dev/exclude: "true"
+    spec:
+      serviceAccountName: mission-control-aggregator
+      securityContext:
+        fsGroup: 10001
+        runAsGroup: 10001
+        runAsNonRoot: true
+        runAsUser: 10001
+      dnsPolicy: ClusterFirst
+      containers:
+        - name: vector
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
+          image: "timberio/vector:0.49.0-distroless-libc"
+          imagePullPolicy: IfNotPresent
+          args:
+            - --config-dir
+            - /etc/vector/
+          env:
+            - name: VECTOR_LOG
+              value: "info"
+          ports:      
+            - name: api
+              containerPort: 8686
+              protocol: TCP
+            - name: prometheus-push
+              containerPort: 9090
+              protocol: TCP
+            - name: statsd
+              containerPort: 8125
+              protocol: TCP
+            - name: syslog
+              containerPort: 9000
+              protocol: TCP
+            - name: vector
+              containerPort: 6000
+              protocol: TCP
+          volumeMounts:
+            - name: data
+              mountPath: "/vector-data-dir"
+            - name: config
+              mountPath: "/etc/vector/"
+              readOnly: true
+      terminationGracePeriodSeconds: 60
+      volumes:
+        - name: config
+          projected:
+            sources:
+              - configMap:
+                  name: mission-control-aggregator
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes: [ReadWriteOnce]
+      resources:
+        requests:
+          storage: 10Gi
+---
+# Source: mission-control/charts/k8ssandra-operator/charts/cass-operator/templates/validatingwebhookconfiguration.yaml
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: mission-control-cass-operator-serving-cert  # this name should match the one appeared in kustomizeconfig.yaml
+  labels:     
+    app.kubernetes.io/name: cass-operator
+    helm.sh/chart: cass-operator-0.61.1
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: k8ssandra-mission-control-mission-control
+spec:
+  # $(SERVICE_NAME) and $(SERVICE_NAMESPACE) will be substituted by kustomize
+  dnsNames:
+    -  mission-control-cass-operator-webhook-service.mission-control.svc
+    -  mission-control-cass-operator-webhook-service.mission-control.svc.cluster.local
+  issuerRef:
+    kind: Issuer
+    name: mission-control-cass-operator-selfsigned-issuer
+  secretName: mission-control-cass-operator-webhook-server-cert # this secret will not be prefixed, since it's not managed by kustomize
+---
+# Source: mission-control/charts/k8ssandra-operator/templates/webhook-serving-cert.yaml
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: mission-control-k8ssandra-operator-serving-cert
+  labels:     
+    app.kubernetes.io/name: k8ssandra-operator
+    helm.sh/chart: k8ssandra-operator-1.27.0
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: k8ssandra-mission-control-mission-control
+spec:
+  dnsNames:
+    -  mission-control-k8ssandra-operator-webhook-service.mission-control.svc
+    -  mission-control-k8ssandra-operator-webhook-service.mission-control.svc.cluster.local
+  issuerRef:
+    kind: Issuer
+    name: mission-control-k8ssandra-operator-selfsigned-issuer
+  secretName: mission-control-k8ssandra-operator-webhook-server-cert
+---
+# Source: mission-control/templates/ui-deployment.yaml
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: mission-control-ui-cert
+  labels:     
+    app.kubernetes.io/name: mission-control
+    helm.sh/chart: mission-control-1.15.0
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: k8ssandra-mission-control-mission-control
+    app: mission-control-ui
+spec:
+  commonName: mission-control-ui
+  issuerRef:
+    kind: Issuer
+    name: mission-control-selfsigned-issuer
+  secretName: mission-control-ui-cert
+---
+# Source: mission-control/templates/webhook-cert.yaml
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: mission-control-serving-cert
+  labels:     
+    app.kubernetes.io/name: mission-control
+    helm.sh/chart: mission-control-1.15.0
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: k8ssandra-mission-control-mission-control
+spec:
+  dnsNames:
+    -  mission-control-webhook-service.mission-control.svc
+    -  mission-control-webhook-service.mission-control.svc.cluster.local
+  issuerRef:
+    kind: Issuer
+    name: mission-control-selfsigned-issuer
+  secretName: mission-control-webhook-server-cert
+---
+# Source: mission-control/templates/self-signed-issuer.yaml
+# This file is used to generate a self-signed root CA certificate
+# and key pair. These manifests will be deployed if the root CA isn't provided in the MC config.
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: mission-control-selfsigned
+  labels:     
+    app.kubernetes.io/name: mission-control
+    helm.sh/chart: mission-control-1.15.0
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: k8ssandra-mission-control-mission-control
+spec:
+  selfSigned: {}
+---
+# Source: mission-control/charts/k8ssandra-operator/charts/cass-operator/templates/validatingwebhookconfiguration.yaml
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: mission-control-cass-operator-selfsigned-issuer
+  labels:     
+    app.kubernetes.io/name: cass-operator
+    helm.sh/chart: cass-operator-0.61.1
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: k8ssandra-mission-control-mission-control
+spec:
+  selfSigned: {}
+---
+# Source: mission-control/charts/k8ssandra-operator/templates/issuer.yaml
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: mission-control-k8ssandra-operator-selfsigned-issuer
+  labels:     
+    app.kubernetes.io/name: k8ssandra-operator
+    helm.sh/chart: k8ssandra-operator-1.27.0
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: k8ssandra-mission-control-mission-control
+spec:
+  selfSigned: {}
+---
+# Source: mission-control/templates/webhook-cert.yaml
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: mission-control-selfsigned-issuer
+  labels:     
+    app.kubernetes.io/name: mission-control
+    helm.sh/chart: mission-control-1.15.0
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: k8ssandra-mission-control-mission-control
+spec:
+  selfSigned: {}
+---
+# Source: mission-control/charts/k8ssandra-operator/templates/admissionwebhookconfiguration.yaml
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  annotations:
+    cert-manager.io/inject-ca-from: mission-control/mission-control-k8ssandra-operator-serving-cert
+  labels:     
+    app.kubernetes.io/name: k8ssandra-operator
+    helm.sh/chart: k8ssandra-operator-1.27.0
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: k8ssandra-mission-control-mission-control
+  name: mission-control-k8ssandra-operator-mutating-webhook-configuration
+webhooks:
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: mission-control-k8ssandra-operator-webhook-service
+      namespace: mission-control
+      path: /mutate-v1-pod-secrets-inject
+  failurePolicy: Fail
+  name: mpod.kb.io
+  objectSelector:
+    matchLabels:
+      app.kubernetes.io/created-by: cass-operator
+  rules:
+  - apiGroups:
+    - ""
+    apiVersions:
+    - v1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - pods
+  sideEffects: None
+---
+# Source: mission-control/charts/k8ssandra-operator/charts/cass-operator/templates/validatingwebhookconfiguration.yaml
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  name: mission-control-cass-operator-validating-webhook-configuration
+  labels:     
+    app.kubernetes.io/name: cass-operator
+    helm.sh/chart: cass-operator-0.61.1
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: k8ssandra-mission-control-mission-control
+  annotations:
+    cert-manager.io/inject-ca-from: mission-control/mission-control-cass-operator-serving-cert
+webhooks:
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: mission-control-cass-operator-webhook-service
+      namespace: mission-control
+      path: /validate-cassandra-datastax-com-v1beta1-cassandradatacenter
+  failurePolicy: Fail
+  name: vcassandradatacenter.kb.io
+  rules:
+  - apiGroups:
+    - cassandra.datastax.com
+    apiVersions:
+    - v1beta1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - cassandradatacenters
+  sideEffects: None
+---
+# Source: mission-control/charts/k8ssandra-operator/templates/validatingwebhookconfiguration.yaml
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  labels:     
+    app.kubernetes.io/name: k8ssandra-operator
+    helm.sh/chart: k8ssandra-operator-1.27.0
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: k8ssandra-mission-control-mission-control
+  annotations:
+    cert-manager.io/inject-ca-from: mission-control/mission-control-k8ssandra-operator-serving-cert
+  name: mission-control-k8ssandra-operator-validating-webhook-configuration
+webhooks:
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: mission-control-k8ssandra-operator-webhook-service
+        namespace: mission-control
+        path: /validate-medusa-k8ssandra-io-v1alpha1-medusabackupschedule
+    failurePolicy: Fail
+    name: vmedusabackupschedule.kb.io
+    rules:
+    - apiGroups:
+      - medusa.k8ssandra.io
+      apiVersions:
+      - v1alpha1
+      operations:
+      - CREATE
+      - UPDATE
+      resources:
+      - medusabackupschedules
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: mission-control-k8ssandra-operator-webhook-service
+        namespace: mission-control
+        path: /validate-k8ssandra-io-v1alpha1-k8ssandracluster
+    failurePolicy: Fail
+    name: vk8ssandracluster.kb.io
+    rules:
+      - apiGroups:
+          - k8ssandra.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - k8ssandraclusters
+    sideEffects: None
+---
+# Source: mission-control/templates/webhook-config.yaml
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  labels:     
+    app.kubernetes.io/name: mission-control
+    helm.sh/chart: mission-control-1.15.0
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: k8ssandra-mission-control-mission-control
+  annotations:
+    cert-manager.io/inject-ca-from: mission-control/mission-control-serving-cert
+  name: mission-control-validating-webhook-configuration
+webhooks:
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: mission-control-webhook-service
+        namespace: mission-control
+        path: /validate-missioncontrol-datastax-com-v1beta2-missioncontrolcluster
+    failurePolicy: Fail
+    name: vmissioncontrolcluster.kb.io
+    rules:
+      - apiGroups:
+          - missioncontrol.datastax.com
+        apiVersions:
+          - v1beta2
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - missioncontrolclusters
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: mission-control-webhook-service
+        namespace: mission-control
+        path: /validate-missioncontrol-datastax-com-v1alpha1-cqlconnectivity
+    failurePolicy: Fail
+    name: vcqlconnectivity.kb.io
+    rules:
+      - apiGroups:
+          - missioncontrol.datastax.com
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - cqlconnectivities
+    sideEffects: None
+---
+# Source: mission-control/templates/crd/service_account.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: mission-control-crd-upgrader
+  labels:     
+    app.kubernetes.io/name: mission-control
+    helm.sh/chart: mission-control-1.15.0
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: k8ssandra-mission-control-mission-control
+  annotations:
+    "helm.sh/hook": pre-install, pre-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    "helm.sh/hook-weight": "0"
+---
+# Source: mission-control/charts/dex/templates/tests/no-config-secret.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mission-control-ui-dex-config-test-no-create
+  labels:
+    helm.sh/chart: dex-0.23.0
+    app.kubernetes.io/name: dex
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/version: "2.42.0"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    "helm.sh/hook": test
+type: Opaque
+data:
+  config.yaml: "ZW5hYmxlUGFzc3dvcmREQjogZmFsc2UKZnJvbnRlbmQ6CiAgaXNzdWVyOiBNaXNzaW9uIENvbnRyb2wKZ3JwYzoKICBhZGRyOiAxMjcuMC4wLjE6NTU1Nwppc3N1ZXI6IGh0dHA6Ly97eyAuUmVsZWFzZS5OYW1lIH19LWRleDo1NTU2L2RleApzdGF0aWNDbGllbnRzOgotIGlkOiBtaXNzaW9uLWNvbnRyb2wtdWkKICBuYW1lOiBNaXNzaW9uIENvbnRyb2wgR1VJCiAgcmVkaXJlY3RVUklzOgogIC0gL3YxL2F1dGgvY2FsbGJhY2sKICBzZWNyZXQ6IFpYaGhiWEJzWlMxaGNIQXRjMlZqY21WMApzdG9yYWdlOgogIGNvbmZpZzoKICAgIGluQ2x1c3RlcjogdHJ1ZQogIHR5cGU6IGt1YmVybmV0ZXMKdGVsZW1ldHJ5OgogIGh0dHA6IDEyNy4wLjAuMTo1NTU4CndlYjoKICBodHRwOiAxMjcuMC4wLjE6NTU1Ng=="
+---
+# Source: mission-control/templates/crd/cluster_role.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: mission-control-crd-upgrader
+  labels:     
+    app.kubernetes.io/name: mission-control
+    helm.sh/chart: mission-control-1.15.0
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: k8ssandra-mission-control-mission-control
+    rbac.authorization.k8s.io/aggregate-to-admin: "true"
+    rbac.authorization.k8s.io/aggregate-to-edit: "true"
+    rbac.authorization.k8s.io/aggregate-to-view: "true"
+  annotations:
+    "helm.sh/hook": pre-install, pre-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    "helm.sh/hook-weight": "1"
+rules:
+  - apiGroups:
+      -  apiextensions.k8s.io
+    resources:
+      - customresourcedefinitions
+      - customresourcedefinitions/status
+    verbs:
+      - create
+      - get
+      - watch
+      - list
+      - update
+      - patch
+---
+# Source: mission-control/templates/crd/cluster_role_binding.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: mission-control-crd-upgrader
+  labels:     
+    app.kubernetes.io/name: mission-control
+    helm.sh/chart: mission-control-1.15.0
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: k8ssandra-mission-control-mission-control
+  annotations:
+    "helm.sh/hook": pre-install, pre-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    "helm.sh/hook-weight": "2"
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: mission-control-crd-upgrader
+subjects:
+  - kind: ServiceAccount
+    name: mission-control-crd-upgrader
+    namespace: mission-control
+---
+# Source: mission-control/templates/crd/crd_patch_job.yaml
+# The conversion webhook for MissionControlClusters is configured in the CRD itself (see ../../crds).
+# Helm does not allow templating in CRDs, yet some aspects of that configuration are dynamic.
+# This job patches the CRD after its deployment to set the correct values.
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: mission-control-crd-patcher
+  labels:     
+    app.kubernetes.io/name: mission-control
+    helm.sh/chart: mission-control-1.15.0
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: k8ssandra-mission-control-mission-control
+  annotations:
+    "helm.sh/hook": pre-install, pre-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation
+    # This must run after the crd-upgrader job
+    "helm.sh/hook-weight": "20"
+spec:
+  backoffLimit: 3
+  template:
+    metadata:
+      labels:         
+        app.kubernetes.io/name: mission-control
+        helm.sh/chart: mission-control-1.15.0
+        app.kubernetes.io/instance: mission-control
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/part-of: k8ssandra-mission-control-mission-control
+    spec:
+      restartPolicy: OnFailure
+      serviceAccountName: mission-control-crd-upgrader
+      securityContext:
+        runAsNonRoot: true
+      containers:
+      - name: kubectl
+        image: docker.io/k8ssandra/k8ssandra-client:mission-control-1.15.0
+        imagePullPolicy: IfNotPresent
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+          seccompProfile:
+            type: RuntimeDefault
+        resources:
+          {}
+        command:
+        - kubectl
+        args:
+        - patch
+        - crd
+        - missioncontrolclusters.missioncontrol.datastax.com
+        - --type
+        - json
+        - -p
+        - |
+          [
+            {
+              "op": "replace",
+              "path": "/metadata/annotations/cert-manager.io~1inject-ca-from",
+              "value": "mission-control/mission-control-serving-cert"
+            },
+            {
+              "op": "replace",
+              "path": "/spec/conversion/webhook/clientConfig/service/namespace",
+              "value": "mission-control"
+            }
+          ]
+---
+# Source: mission-control/templates/crd/crd_upgrade_job.yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: mission-control-crd-upgrader
+  labels:     
+    app.kubernetes.io/name: mission-control
+    helm.sh/chart: mission-control-1.15.0
+    app.kubernetes.io/instance: mission-control
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: k8ssandra-mission-control-mission-control
+  annotations:
+    "helm.sh/hook": pre-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation
+    "helm.sh/hook-weight": "10"
+spec:
+  backoffLimit: 3
+  template:
+    metadata:
+      labels:         
+        app.kubernetes.io/name: mission-control
+        helm.sh/chart: mission-control-1.15.0
+        app.kubernetes.io/instance: mission-control
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/part-of: k8ssandra-mission-control-mission-control
+    spec:
+      restartPolicy: OnFailure
+      serviceAccountName: mission-control-crd-upgrader
+      securityContext:
+        runAsNonRoot: true
+      containers:
+        - name: crd-upgrade-job
+          image: docker.io/k8ssandra/k8ssandra-client:mission-control-1.15.0
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: true
+            seccompProfile:
+              type: RuntimeDefault
+          env:
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          args:
+            - helm
+            - upgrade
+            - --chartVersion
+            - 1.15.0
+            - --chartName
+            - mission-control
+            - --chartRepo
+            - mission-control
+            - --charts
+            - k8ssandra-operator,cass-operator
+          resources:
+            {}

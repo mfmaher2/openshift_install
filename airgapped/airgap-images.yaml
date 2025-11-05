@@ -1,0 +1,8 @@
+global:
+  clusterScoped: true
+  clusterScopedResources: true
+  imageConfig:
+    defaults:
+      registry: nexus-docker.nexus.svc.cluster.local:5000
+      pullSecrets:
+        - mc-regcred
