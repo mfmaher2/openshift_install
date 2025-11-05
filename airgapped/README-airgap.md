@@ -252,10 +252,10 @@ oc scale sts -n <cluster-ns> <sts-name> --replicas=1
   - Ensure images.txt covered everything and mirroring succeeded.
   - Confirm pod specs show nexus-docker.nexus.svc.cluster.local:5000/... and mc-regcred is attached.
 - Route shows “Application is not available”:
--   Service port name “https” → targetPort 8080, Route termination “passthrough”.
--   Check NetworkPolicies; allow from namespaceSelector label network.openshift.io/policy-group=ingress to port 8080.
+  - Service port name “https” → targetPort 8080, Route termination “passthrough”.
+  - Check NetworkPolicies; allow from namespaceSelector label network.openshift.io/policy-group=ingress to port 8080.
 - Dex login fails after password change:
--   Ensure bcrypt is quoted in dex-reset.yaml; apply via Helm; restart Dex:
-    ```bash
+  - Ensure bcrypt is quoted in dex-reset.yaml; apply via Helm; restart Dex:
+```bash
 oc rollout restart deploy/mission-control-dex -n mission-control
-    ```
+```
