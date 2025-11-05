@@ -28,3 +28,23 @@ oc apply -f nexus.yaml
 oc adm policy add-scc-to-user anyuid -z nexus-sa -n nexus
 
 ```
+What each piece does
+
+- Namespace nexus: isolates the Nexus deployment.
+- ServiceAccount nexus-sa: the pod runs under this SA.
+- PVC nexus-data: persistent storage for Nexus (/nexus-data).
+- Deployment nexus: runs the Nexus 3 container, exposes 8081 (UI) and 5000 (Docker registry).
+- Service nexus: exposes UI inside cluster.
+- Service nexus-docker: exposes registry inside cluster on port 5000.
+- Route nexus: exposes the UI externally via OpenShift router (HTTPS edge‑terminated).
+
+Verify and get admin password
+```bash
+oc get pods -n nexus -w
+NEXUS_HOST=$(oc get route nexus -n nexus -o jsonpath='{.spec.host}')
+echo "Nexus UI: https://${NEXUS_HOST}"
+POD=$(oc get pod -n nexus -l app=nexus -o jsonpath='{.items[0].metadata.name}')
+oc exec -n nexus "$POD" -- cat /nexus-data/admin.password
+# Username: admin
+# Password: (value printed above)
+```
