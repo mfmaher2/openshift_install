@@ -259,3 +259,10 @@ oc scale sts -n <cluster-ns> <sts-name> --replicas=1
     ```bash
     oc rollout restart deploy/mission-control-dex -n mission-control
     ```
+## Appendix: Generate a bcrypt hash (for Dex)
+```bash
+python3 - <<'PY'
+import bcrypt
+print(bcrypt.hashpw(b'NewStrongPassword!', bcrypt.gensalt(rounds=10)).decode())
+PY
+```
