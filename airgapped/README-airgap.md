@@ -256,6 +256,6 @@ oc scale sts -n <cluster-ns> <sts-name> --replicas=1
   - Check NetworkPolicies; allow from namespaceSelector label network.openshift.io/policy-group=ingress to port 8080.
 - Dex login fails after password change:
   - Ensure bcrypt is quoted in dex-reset.yaml; apply via Helm; restart Dex:
-```bash
-oc rollout restart deploy/mission-control-dex -n mission-control
-```
+    ```bash
+    oc rollout restart deploy/mission-control-dex -n mission-control
+    ```
