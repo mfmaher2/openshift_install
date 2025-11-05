@@ -17,7 +17,7 @@ This guide uses an in‑cluster Nexus (“mock repository”) to host both conta
 
 ---
 
-## 1) Deploy an in‑cluster Nexus (UI + Docker registry)
+## Deploy an in‑cluster Nexus (UI + Docker registry)
 
 Apply Nexus resources (Namespace, SA, PVC, Deployment, Services, Route):
 
