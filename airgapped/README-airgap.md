@@ -126,10 +126,27 @@ helm repo update
 helm search repo mc-internal/mission-control
 ```
 
-## Install cert‑manager (air‑gapped)
-Mission Control creates cert-manager resources; install cert-manager from Nexus (after mirroring its chart and images).
+### Install Cert-Manager
+Mission Control uses cert-manager CRDs (Certificate, Issuer, ClusterIssuer). Install upstream cert-manager via Helm:
 
-Download CRDs once (to include in your bundle)
 ```bash
+# Namespace
+oc create namespace cert-manager || true
 
+# Install CRDs
+kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.14.5/cert-manager.crds.yaml
+```
+### Helm repo and install
+```bash
+helm repo add jetstack https://charts.jetstack.io
+helm repo update
+helm upgrade --install cert-manager jetstack/cert-manager \
+  --namespace cert-manager \
+  --version v1.14.5
+```
+
+### Verify CRDs and pods
+```bash
+oc get crd certificates.cert-manager.io issuers.cert-manager.io clusterissuers.cert-manager.io
+oc get pods -n cert-manager
 ```
