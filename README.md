@@ -15,21 +15,24 @@ This guide walks through a clean install of Mission Control on OpenShift with fa
 Tip: To generate a bcrypt hash for dex-reset.yaml, see “Appendix: Generate a bcrypt hash”.
 
 ---
-
-# Install Cert-Manager (required upstream Helm)
+### Select VM from Techzone
+![Mission Control UI login screen](docs/images/techzone.png "Mission Control UI")
+### Select copy command from top right corner after logging into OpenShift Cluster Console
+![Mission Control UI login screen](docs/images/logincmd.png "Mission Control UI")
+### Get Token to login into Openshift Cluster CLI
+![Mission Control UI login screen](docs/images/logintokencmd.png "Mission Control UI")
+### Install Cert-Manager (required upstream Helm)
 Mission Control uses cert-manager CRDs (Certificate, Issuer, ClusterIssuer). Install upstream cert-manager via Helm:
 
-# Namespace
+
 ```bash
+# Namespace
 oc create namespace cert-manager || true
-```
 
 # Install CRDs
-```bash
 kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.14.5/cert-manager.crds.yaml
 ```
-
-# Helm repo and install
+### Helm repo and install
 ```bash
 helm repo add jetstack https://charts.jetstack.io
 helm repo update
@@ -38,19 +41,20 @@ helm upgrade --install cert-manager jetstack/cert-manager \
   --version v1.14.5
 ```
 
-# Verify CRDs and pods
+### Verify CRDs and pods
 ```bash
 oc get crd certificates.cert-manager.io issuers.cert-manager.io clusterissuers.cert-manager.io
 oc get pods -n cert-manager
 ```
 
-### Install Mission Control (fresh cluster)
+# Install Mission Control 
 
 This installs Mission Control into the mission-control namespace using your values files.
 
 ```bash
 # Create namespace
 oc new-project mission-control
+
 # Run the following commands to grant access to Mission Control service accounts:
 oc adm policy add-scc-to-user nonroot-v2 -z loki
 oc adm policy add-scc-to-user nonroot-v2 -z mission-control
@@ -122,7 +126,7 @@ echo "${ROUTER_IP} ${HOST}" | sudo tee -a /etc/hosts
 ---
 
 ### Login to the UI
-
+![Mission Control UI login screen](docs/images/missioncontrolui.png "Mission Control UI")
 - Username: admin@example.com
 - Password: the clear-text password you hashed in dex-reset.yaml
 
@@ -137,6 +141,7 @@ oc rollout status  deploy/mission-control-dex -n mission-control
 
 ### Create a cluster (OpenShift SCC grant)
 
+![Mission Control UI login screen](docs/images/createcluster.png "Mission Control UI")
 On OpenShift, Cassandra pods may be blocked by the default SCC when they request fixed UIDs/FSGroup. After creating your cluster from the UI:
 
 1) Identify which ServiceAccount the Cassandra StatefulSet uses (or assume mission-control if that’s your template default):
