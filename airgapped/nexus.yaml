@@ -1,0 +1,97 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: nexus
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: nexus-sa
+  namespace: nexus
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nexus-data
+  namespace: nexus
+spec:
+  accessModes: [ "ReadWriteOnce" ]
+  resources:
+    requests:
+      storage: 20Gi
+  # storageClassName: <OPTIONAL-YOUR-SC>   # set if your cluster requires an explicit SC
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nexus
+  namespace: nexus
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nexus
+  template:
+    metadata:
+      labels:
+        app: nexus
+    spec:
+      serviceAccountName: nexus-sa
+      securityContext:
+        fsGroup: 2000
+      containers:
+      - name: nexus
+        image: docker.io/sonatype/nexus3:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8081   # Nexus UI / REST
+        - containerPort: 5000   # Docker registry (you enable repo in UI)
+        volumeMounts:
+        - name: nexus-data
+          mountPath: /nexus-data
+        securityContext:
+          runAsUser: 200
+      volumes:
+      - name: nexus-data
+        persistentVolumeClaim:
+          claimName: nexus-data
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nexus
+  namespace: nexus
+spec:
+  selector:
+    app: nexus
+  ports:
+  - name: ui
+    port: 8081
+    targetPort: 8081
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nexus-docker
+  namespace: nexus
+spec:
+  selector:
+    app: nexus
+  ports:
+  - name: registry
+    port: 5000
+    targetPort: 5000
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: nexus
+  namespace: nexus
+spec:
+  to:
+    kind: Service
+    name: nexus
+  port:
+    targetPort: ui
+  tls:
+    termination: edge
