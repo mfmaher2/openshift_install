@@ -23,8 +23,6 @@ Tip: To generate a bcrypt hash for dex-reset.yaml, see “Appendix: Generate a b
 ![Mission Control UI login screen](docs/images/logintokencmd.png "Mission Control UI")
 ### Install Cert-Manager (required upstream Helm)
 Mission Control uses cert-manager CRDs (Certificate, Issuer, ClusterIssuer). Install upstream cert-manager via Helm:
-
-
 ```bash
 # Namespace
 oc create namespace cert-manager || true
