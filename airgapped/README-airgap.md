@@ -6,7 +6,6 @@ This guide uses an in‑cluster Nexus (“mock repository”) to host both conta
 
 - OpenShift cluster admin (oc CLI configured)
 - Helm v3.12+ on your workstation
-- A workstation with temporary internet access for mirroring (to pull once, then push to Nexus)
 - Files you will create in this guide:
   - values-defaults.yaml (or values-full.yaml)
   - dex-reset.yaml (contains bcrypt hash; see Appendix)
