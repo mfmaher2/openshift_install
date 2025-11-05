@@ -68,12 +68,12 @@ echo "https://${NEXUS_HOST}"
 ```
 Username: admin
 Password: (value printed from /nexus-data/admin.password)
+
 Create repositories
-
-Repository → Repositories → Create repository:
-docker (hosted): Name docker-local, HTTP port 5000 → Save
-helm (hosted): Name helm-local → Save
+- Repository → Repositories → Create repository:
+  - docker (hosted): Name docker-local, HTTP port 5000 → Save
+  - helm (hosted): Name helm-local → Save
+  - 
 In‑cluster endpoints you’ll use later:
-
-Docker registry: nexus-docker.nexus.svc.cluster.local:5000
-Helm repo:  http://nexus.nexus.svc.cluster.local:8081/repository/helm-local
+  - Docker registry: nexus-docker.nexus.svc.cluster.local:5000
+  - Helm repo:  http://nexus.nexus.svc.cluster.local:8081/repository/helm-local
