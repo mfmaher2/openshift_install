@@ -73,7 +73,21 @@ Create repositories
 - Repository → Repositories → Create repository:
   - docker (hosted): Name docker-local, HTTP port 5000 → Save
   - helm (hosted): Name helm-local → Save
-  - 
+    
 In‑cluster endpoints you’ll use later:
   - Docker registry: nexus-docker.nexus.svc.cluster.local:5000
   - Helm repo:  http://nexus.nexus.svc.cluster.local:8081/repository/helm-local
+
+## Mirror the Mission Control chart and images to Nexus
+Pull chart and render (observability disabled for templating)
+```bash
+# Pull Mission Control chart
+helm pull oci://registry.replicated.com/mission-control/mission-control --version 1.15.0
+
+# Render manifests to harvest images
+helm template mission-control oci://registry.replicated.com/mission-control/mission-control \
+  --version 1.15.0 \
+  -n mission-control \
+  -f disable-observability.yaml \
+  > rendered.yaml
+```
