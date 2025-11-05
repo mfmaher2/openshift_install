@@ -91,3 +91,45 @@ helm template mission-control oci://registry.replicated.com/mission-control/miss
   -f disable-observability.yaml \
   > rendered.yaml
 ```
+Extract all container image references
+```bash
+yq e -r '.. | .image? | select(.)' rendered.yaml | sort -u > images.txt
+```
+Port‑forward Nexus Docker service and mirror images into Nexus
+```bash
+# Port-forward the in-cluster Nexus registry (leave running)
+oc -n nexus port-forward svc/nexus-docker 5000:5000 >/tmp/nexus-registry-pf.log 2>&1 &
+
+# Mirror all images; strip the source registry from the path
+# so final refs look like: nexus:5000/<repo>/<image>:<tag>
+while read -r IMG; do
+  REPO_TAG=$(echo "$IMG" | sed -E 's#^[^/]+/##')   # drop leading registry
+  echo "Copying $IMG -> localhost:5000/$REPO_TAG"
+  skopeo copy --all docker://"$IMG" docker://localhost:5000/"$REPO_TAG" --dest-tls-verify=false
+done < images.txt
+```
+
+Upload the chart archive to helm‑local
+```bash
+NEXUS_HOST=$(oc get route nexus -n nexus -o jsonpath='{.spec.host}')
+NEXUS_URL="https://${NEXUS_HOST}"
+
+# Upload chart (replace password with your changed admin password)
+curl -u admin:'<ADMIN_PASSWORD>' \
+  --upload-file mission-control-1.15.0.tgz \
+  "${NEXUS_URL}/repository/helm-local/"
+
+# Add internal Helm repo
+helm repo add mc-internal "${NEXUS_URL}/repository/helm-local/" \
+  --username admin --password '<ADMIN_PASSWORD>'
+helm repo update
+helm search repo mc-internal/mission-control
+```
+
+## Install cert‑manager (air‑gapped)
+Mission Control creates cert-manager resources; install cert-manager from Nexus (after mirroring its chart and images).
+
+Download CRDs once (to include in your bundle)
+```bash
+
+```
