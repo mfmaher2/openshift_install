@@ -48,3 +48,13 @@ oc exec -n nexus "$POD" -- cat /nexus-data/admin.password
 # Username: admin
 # Password: (value printed above)
 ```
+
+Allow write access to /nexus-data (OCP SCC)
+```bash
+oc adm policy add-scc-to-user anyuid -z nexus-sa -n nexus
+```
+
+Wait for pod to come up
+```bash
+oc get pods -n nexus -w
+```
